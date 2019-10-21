@@ -1,26 +1,22 @@
+
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+// -- Mark 1 --
+// lecture 57: E-commerce Homepage + SASS Setup
+import HomePage from './homepage.component';
+
+// include our <HomePage /> component below and then we need to go to the terminal and type
+// " npm start " to start the project and after we press enter we will be automatically taken
+// to localhost:3000, which includes our component App.js
+// End of -- Mark 1 --
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <HomePage />
+        </div>
+    );
 }
 
 export default App;
