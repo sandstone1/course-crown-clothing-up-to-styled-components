@@ -1,0 +1,101 @@
+
+
+.menu-item {
+    display         : flex;
+    flex            : 1 1 auto;
+    align-items     : center;
+    justify-content : center;
+    min-width       : 30%;
+    height          : 240px;
+    // -- Mark 1 --
+    // lecture 63: Styling Menu Items
+    overflow        : hidden;
+     // End of -- Mark 1 --
+    margin          : 0 7.5px 15px 7.5px;
+
+    border : 1px solid rgba( 0, 0, 0, 1 );
+
+    // -- Mark 1 --
+    // lecture 63: Styling Menu Items
+    &:hover {
+        cursor : pointer;
+
+        // Chris Coyier said: " Here is the "plain English" of "#header .callout":
+        // Select all elements with the class name callout that are decendents of the element
+        // with an ID of header. "
+        > .background-image {
+            transform  : scale( 1.1 );
+            transition : transform 6s cubic-bezier( 0.25, 0.45, 0.45, 0.95 );
+        }
+
+        > .content {
+            opacity : 0.9;
+        }
+
+    }
+    // End of -- Mark 1 --
+
+    // Chris Coyier said: " Here is the "plain English" of "#header.callout": Select the element
+    // which has an ID of header and also a class name of callout."
+    // so if large and menu-item are present as classes inside the <div> then apply the
+    // following height style below ( large and menu-item classes are only present in the
+    // menu item boxes for womens and mens )
+    &.large {
+        height : 380px;
+    }
+
+    // not sure why margin for &first:child and &:last-child are the same the margin parameters
+    // for menu-item
+    &:first-child {
+        margin : 0 7.5px 15px 7.5px;
+    }
+
+    &:last-child {
+        margin : 0 7.5px 15px 7.5px;
+    }
+
+    // -- Mark 1 --
+    // lecture 63: Styling Menu Items
+    // want to the background image to have the same width and height as our container or menu-item
+    > .background-image {
+        width  : 100%;
+        height : 100%;
+
+        background-position : center;
+        background-size     : cover;
+    }
+    // End of -- Mark 1 --
+
+    > .content {
+        display         : flex;
+        position        : absolute;
+        flex-direction  : column;
+        align-items     : center;
+        justify-content : center;
+        height          : 90px;
+        padding         : 0 25px 0 25px;
+
+        border : 1px solid rgba( 0, 0, 0, 1 );
+
+        background : rgba( 255, 255, 255, 1.0 );
+        opacity    : 0.7;
+
+        // > is a child combinator 
+        > .title {
+            margin : 0 0 6px 0;
+
+            font-size   : 22px;
+            // from stackoverflow: "Default font weight is 400, and fonts work in multiples of
+            // 100. 300 is light (if your font supports it), 400 is regular, 600 is semibold
+            // and 700 is bold."
+            font-weight : 700;
+			color       : rgbaa(74, 74, 74, 1);
+        }
+
+        > .subtitle {
+            font-size   : 16px;
+            font-weight : 300;           
+        }
+    }
+}
+

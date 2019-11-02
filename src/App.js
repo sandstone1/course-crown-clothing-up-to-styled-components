@@ -4,7 +4,10 @@ import './App.css';
 
 // -- Mark 1 --
 // lecture 57: E-commerce Homepage + SASS Setup
-import HomePage from './homepage.component';
+// -- Mark 2 --
+// lecture 61: Homepage and Directory Components
+import HomePage from './pages/homepage/homepage.component';
+// End of -- Mark 2 --
 
 // include our <HomePage /> component below and then we need to go to the terminal and type
 // " npm start " to start the project and after we press enter we will be automatically taken
