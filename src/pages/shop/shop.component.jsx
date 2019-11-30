@@ -1,4 +1,15 @@
 
+
+// ==============================
+// Component Tree Structure
+// ==============================
+// App                    - React Router
+//   Shop Page            - Class and State
+//   Shop Data            - Data
+//     Collection-Preview - Functional and Presentational
+//       Collection-Item  - Functional and Presentational
+
+
 import React from 'react';
 // import in the shop data
 import ShopData from './shop.data';

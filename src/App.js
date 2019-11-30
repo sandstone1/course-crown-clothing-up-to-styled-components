@@ -18,6 +18,12 @@ import { Route, Switch } from 'react-router-dom';
 // lecture 69: Shop Page
 import ShopPage from './pages/shop/shop.component';
 
+// -- Mark 5 --
+// lecture 71: Header Component
+import Header from './components/header/header.component';
+// End of -- Mark 5 --
+
+
 // -- Mark 4 -- continued
 // comment out HatsPage
 /*
@@ -63,13 +69,22 @@ function App() {
         // components folder called " collection-preview " and inside that folder let's add
         // a file called " collection-preview.component.jsx " and a file called
         // " collection-preview.styles.sass " and go to the file: collection-preview.component.jsx
+
+        // -- Mark 5 --
+        // lecture 71: Header Component
+        // place the Header component outside the Switch and Route components and by doing this
+        // the Header component will be rendered on every page, which is what we want and we can
+        // do the same thing for pop ups, overlays and footers and being able to place
+        // components outside our Switch component makes our app very intuitive and if we go to
+        // our application, we can see the header and the header is unstyled right now
         <div>
+            <Header />
             <Switch>
                 <Route path="/"     exact={ true } component={ HomePage } />
                 <Route path="/shop"                component={ ShopPage } />
             </Switch>        
         </div>
-        // End of -- Mark 3 and Mark 4 --
+        // End of -- Mark 3 and Mark 4 and Mark 5 --
     );
 }
 
