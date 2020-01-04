@@ -1,0 +1,67 @@
+
+.custom-button {
+    width     : auto;
+    min-width : 165px;
+    height    : 50x;
+    padding   : 0 35px 0 35px;
+
+    border : none;
+
+    // bolder: One relative font weight heavier than the parent element.
+    // so with an inherited value of 400, bolder would result in a value of 700
+    font-family    : 'Open Sans Condensed';
+    font-size      : 15px;
+    font-weight    : 700;
+    color          : rgb( 255,255,255 );
+    letter-spacing : 0.5px;
+    line-height    : 50px;
+    text-transform : uppercase;
+
+    background-color : rgb( 0,0,0 );
+
+    cursor     : pointer;
+    // transition : all 0.2s ease;
+
+    &:hover {
+        border : 1px solid rgb( 0,0,0 );
+
+        color : rgb( 0,0,0 );
+
+        background-color : rgb( 255,255,255 ); 
+    }
+
+    // -- Mark 1 --
+    // lecture 85: Google Sign In Authentication 3
+    // now let's add in the styling for the class google-sign-in
+    // remember, Chris Coyier said: " Here is the "plain English" of "#header.callout": Select
+    // the element which has an ID of header and also a class name of callout."
+    // also, Chris Coyier said: "Adding another class
+    // The & comes in handy when you're nesting and you want to create a more specific selector,
+    // like an element that has *both* of two classes, like this:
+    /*
+    CSS
+        .some-class.another-class { }
+
+    You can do this while nesting by using the &.
+
+    SCSS
+    .some-class {
+        &.another-class { }
+    }"
+
+    // the SCSS version above equals the CSS version above
+    */
+    &.google-sign-in {
+        color : rgba( 255,255,255,1 );
+        
+        background-color : rgba( 66,133,244,1 ); // this is a Google blue
+
+        &:hover{
+            border : none;
+            
+            background-color : rgba( 53,122,232,1 ); 
+        }
+    }
+    // End of -- Mark 1
+
+}

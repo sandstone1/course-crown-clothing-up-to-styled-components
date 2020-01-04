@@ -59,7 +59,7 @@ const MenuItem = ( { title, imageUrl, size, history, match, linkUrl } ) => (
         // set up to show " localhost:3000/somehereelse " and if so then match.url will
         // equal " localhost:3000/somehereelse " and clicking on the link below will take
         // us to " localhost:3000/somehereelse/hats " in this particualr example
-        onClick={ () => history.push( `${ match.url }${ linkUrl }` ) } 
+        onClick={ () => history.push( `${ match.url }${ linkUrl }` ) }
         // End of -- Mark 2 --
     >
         <div

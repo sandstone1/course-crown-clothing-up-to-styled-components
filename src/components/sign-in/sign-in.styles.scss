@@ -1,0 +1,25 @@
+
+// -- Mark 1 --
+// lecture 85: Google Sign In Authentication 3
+// change width to 380px and add styles for the button class and to make the width of our
+// custom bottons equal the input fields above we need to go to the app.css file and add
+// * { box-sizing : border-box }
+// from w3schools: "The box-sizing property allows us to include the padding and border in
+// an element's total width and height. If you set box-sizing: border-box; on an element
+// padding and border are included in the width and height" and now if we check our app
+// we see the elements are aligned
+// End of -- Mark 1 --
+.sign-in {
+    display        : flex;
+    flex-direction : column; 
+    width          : 380px;
+
+    .title {
+        margin : 10px 0 10px 0;
+    }
+
+    .buttons{
+        display         : flex;
+        justify-content : space-between;
+    }
+}
