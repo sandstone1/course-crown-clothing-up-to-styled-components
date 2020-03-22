@@ -15,8 +15,11 @@ import CustomButton from '../custom-button/custom-button.component';
 // -- Mark 3 --
 // lecture 81: Google Sign In Authentication
 // import in the sign in with Google authentication functionality
-import { signInWithGoogle } from '../../firebase/firebase.utils';
-// End of -- Mark 3 --
+// lecture 94: Sign In with Email and Password
+// -- Mark 5 --
+// import our auth library
+import { auth, signInWithGoogle } from '../../firebase/firebase.utils';
+// End of -- Mark 3 & 5 --
 
 
 // we need to use a class component here since we need to store what the users
@@ -28,11 +31,72 @@ class SignIn extends React.Component {
         password : ''
     };
 
-    handleSubmit = ( e ) => {
+    handleSubmit = async ( e ) => {
         // we add e.preventDefault since we want full control over the form submission
         e.preventDefault();
 
-        this.setState( { email : '', password : '' } );
+        // lecture 94: Sign In with Email and Password
+        // -- Mark 5 --
+        // first, import our auth library above and then convert our handleSubmit method
+        // to an async method and then let's destructure off our email and password from
+        // our state object and then create a try catch block
+        const { email, password } = this.state;
+
+        try {
+
+            // within our try block we will await and see if
+            // " auth.signInWithEmailAndPassword( email, password ); " runs successfully
+            await auth.signInWithEmailAndPassword( email, password );
+
+            // and if " await auth.signInWithEmailAndPassword( email, password ); "
+            // succeeds or executes successfully then we will clear our state
+            this.setState( { email : '', password : '' } );
+
+        } catch ( error ) {
+
+            // if " auth.signInWithEmailAndPassword( email, password ); " fails to run
+            // successfully then we will console.log the error
+            console.log( error );
+
+        }
+
+        // now let's go to our sign in and sign up page and first we need to log out
+        // and then let's try to sign in with the account we created in lecture 92 or
+        // the user account with an email of " mike@gmail.com " and password of
+        // " 12341234 " and now if we sign in with this account we see " SIGN IN "
+        // changes to " SIGN OUT " and if we check the console we see that our user
+        // has been updated with the currentUser of:
+        /*
+        {currentUser: {…}}
+            currentUser:
+            id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
+            createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
+            displayName: "Mike"
+            email: "mike@gmail.com"
+            __proto__: Object
+        __proto__: Object
+        */
+
+        // and this is the correct currentUser since we signed in with the email and
+        // password information for that particular user so we know everything is
+        // synced up and properly working and remove " console.log( this.state ); " in
+        // App.js since we won't need it anymore but I decided to keep it for now
+        // so that I can continue to see that our app is working correctly
+
+        // now let's commit our code since we have finished our sign in and sign up
+        // component
+
+        // so let's do:
+        // Rogers-iMac:crown_clothing Home$ git status
+        // Rogers-iMac:crown_clothing Home$ git add .
+        // Rogers-iMac:crown_clothing Home$ git commit -m " Finished sign in handleSubmit method "
+        // Rogers-iMac:crown_clothing Home$ git push origin master
+
+        // now if I go to my " crown-clothing " project in GutHub, I see the
+        // changes were uploaded sucessfully
+
+        // End of -- Mark 5 --
+
     }
 
     handleChange = ( e ) => {
