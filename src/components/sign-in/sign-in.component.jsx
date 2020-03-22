@@ -40,12 +40,18 @@ class SignIn extends React.Component {
         // the value will correspond to " value={ this.state.email } " and 
         //" value={ this.state.password } " and the name will correspond to " name="email" "
         // and " name="password" "
-        const { value, name } = e.target;
+        const { name, value } = e.target;
 
         // so if name = email and the value was " tex " then setState would
         // equal " email : tex " and we put [ ] around name because as anwsered in StackOverflow: 
         // " This will handle multiple elements of form as an array and no need to set each
         // individual element "
+
+        // could have done this instead:
+        // " this.setState( { [ e.target.name ] : e.target.value } ); "
+
+        // [ name ] below is a dynamic key because the [ ] makes it a dynamic key, meaning the
+        // key will interpolate different values based on the underlying code
         this.setState( { [ name ] : value } );
     }
 
@@ -101,7 +107,7 @@ class SignIn extends React.Component {
         // and now go to our sign in component style sheet or sign-in.styles.scss and match
         // the styles closer to the final app styles
         // End of -- Mark 4 --
-        return(
+        return (
             <div className="sign-in">
                 <h2>I already have an account</h2>
                 <span className="title">Sign in with your email and password</span>
@@ -110,7 +116,7 @@ class SignIn extends React.Component {
                     <FormInput
                         name="email"
                         type="email"
-                        label="email"
+                        label="Email"
                         value={ this.state.email }
                         handleChange={ this.handleChange }
                         required
@@ -118,14 +124,18 @@ class SignIn extends React.Component {
                     <FormInput
                         name="password"
                         type="password"
-                        label="password"
+                        label="Password"
                         value={ this.state.password }
                         handleChange={ this.handleChange }
                         required
                     />
 
                     <div className="buttons">
-                        <CustomButton type="submit">Sign in</CustomButton>
+                        <CustomButton
+                            type="submit"
+                        >
+                            Sign in
+                        </CustomButton>
                         <CustomButton
                             type="button"
                             onClick={ signInWithGoogle }

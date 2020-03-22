@@ -35,8 +35,13 @@ import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up
 // Google account or sign in with your email and password and we want to be able to pass the state
 // of our user into the components that need it or we want to access our current user object
 // throughout our application so convert our App below to a class component
-import { auth } from './firebase/firebase.utils';
-// End of -- Mark 7 --
+
+
+// -- Mark 9 --
+// lecture 89: Storing User Data in Firebase
+// let's import our named export called createUserProfileDocument from firebase.utils.js
+import { auth, createUserProfileDocument } from './firebase/firebase.utils';
+// End of -- Mark 7 & 9 --
 
 
 // -- Mark 4 -- continued
@@ -92,8 +97,618 @@ class App extends React.Component {
         // " this.unsubscribeFromAuth " will equal a function and when we call this function we
         // will close the subscription that we created below and we close the subscription
         // in componentWillUnmount below
-        this.unsubscribeFromAuth = auth.onAuthStateChanged( ( user ) => {
-            this.setState( { currentUser : user } );
+
+
+        // -- Mark 10 --
+        // lecture 91: Storing User Data In Our App
+        // so below we are calling the " createUserProfileDocument() " function that we just
+        // made
+        
+        // remember, in the last video we stored the user data in our database but now
+        // we have to store that data in the " state " of our application so we can use it
+        // in our app
+
+        // let's modify our code so we understand what is actually happening
+
+        // first let's change
+        // " this.unsubscribeFromAuth = auth.onAuthStateChanged( async ( user ) => { " to
+        // " this.unsubscribeFromAuth = auth.onAuthStateChanged( async ( userAuth ) => { "
+        // because now we know what were getting back is a userAuth
+
+        // remember we first need to comment out " createUserProfileDocument( user ); " and
+        // " console.log( user ); " below
+
+        this.unsubscribeFromAuth = auth.onAuthStateChanged( async ( userAuth ) => {
+
+            // what we are saying below is that if the userAuth object is not null or meaning it
+            // does exist then we want to run the code inside the if statement below and
+            // if the user is signed out then userAuth will be " null " or false so the if
+            // statement below will not run in this situation and this is what we want because
+            // we don't want to setState if the user has signed out
+            if ( userAuth ) {
+
+                // remember, what we get back from our createUserProfileDocument() function is
+                // the userRef and remember if the firebase.utils.js file we returned userRef
+                // or did " return userRef; " at the bottom of the
+                // createUserProfileDocument() function and so it makes sense when we call the
+                // createUserProfileDocument() function in App.js we will get back the userRef
+                // object
+                const userRef = await createUserProfileDocument( userAuth );
+
+                // and we want the userRef object because we are going to check and see if our
+                // database has updated at that reference location with any new data so were
+                // kind of saying has the snapShot changed?
+
+                // the moment the following code runs or the moment this code runs:
+                // " userRef.onSnapShot() " we will get back is a snapshot object and this object
+                // will represent the data that is currently stored in our database so this
+                // code will give us a snapShot object and on this snapShot object we will be able
+                // to get the data related to the user that we may have just created and stored
+                // in our database ( i.e. we did this in the last lecture ) or the data related
+                // to the user that is already stored in our Firestrore database
+
+                // now let's talk about the snapShot object and Yihua is now reading from a
+                // slide that is titled " DocumentSnapshot "
+
+                // from slide bullet #1 - " we get a documentSnapshot object from our
+                // documentReference object " and we do this by using the .get() method
+
+                // from slide bullet #2 - " the documentSnapshot object allows us to check
+                // if a document exists at this query using the .exists property which
+                // returns a boolean "
+
+                // from slide bullet #3 - the documentSnapshot object also allows us to " get
+                // the actual properties on the object by calling the .data() method, which returns
+                // a JSON object of the document " or this method will return a JSON object of
+                // the document
+
+                // and remember, we do not get any data until we use the data method on snapShot
+                // and if we do " snapShot.data() " as shown below then we will get the following
+                // data back ( see below ):
+                // commented out based on changes below
+                /*
+                userRef.onSnapshot( ( snapShot ) => {
+                    console.log( snapShot.data() );
+                } );
+                */
+
+                // remember our data will come back to us as an object and the object will
+                // contain the key value pairs that we created in the last video and those
+                // key value pairs are: " createdAt : ", " displayName : Roger Hall " and
+                // " email: rogerhall123@gmail.com  " and below is the object returned by
+                // " snapShot.data() ":
+                /*
+                createdAt: Timestamp {seconds: 1584064599, nanoseconds: 362000000}
+                displayName: "Roger Hall"
+                email: "rogerhall123@gmail.com"
+                __proto__: Object
+                */
+
+                // if we just do:
+                /*
+                userRef.onSnapshot( ( snapShot ) => {
+                    console.log( snapShot );
+                } );
+                */
+
+                // then we will get the following data back in the console:
+                /*
+                DocumentSnapshot {_firestore: Firestore, _key: DocumentKey, _document: Document, _fromCache: true, _hasPendingWrites: false, …}
+                id: "NLszUUbnVGfP0krGUBIKUgQxC5s1"
+                ref: DocumentReference
+                exists: true
+                metadata: SnapshotMetadata
+                _firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue, INTERNAL: {…}, _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+                _key: DocumentKey {path: ResourcePath}
+                _document: Document {key: DocumentKey, version: SnapshotVersion, objectValue: ObjectValue, proto: {…}, converter: ƒ, …}
+                _fromCache: true
+                _hasPendingWrites: false
+                _converter: undefined
+                __proto__: Object
+                */
+
+                // so " snapShot.data() " is main thing we need to use but we see we do not have the
+                // id when we ran " snapShot.data() " but as we saw above in the snapShot object we
+                // had the id so let's do console.log( snapShot ) again:
+                /*
+                userRef.onSnapshot( ( snapshot ) => {
+                    console.log( snapshot );
+                } );
+                */
+
+                // so on the snapshot itself is the id of where we currently are in our userRef
+                // as well as the id of our DocumentSnapshot and the DocumentSnapshot represents
+                // the our snapshot data or:
+                /*
+                DocumentSnapshot {_firestore: Firestore, _key: DocumentKey, _document: Document,
+                _fromCache: false, _hasPendingWrites: false, …}
+                id: "NLszUUbnVGfP0krGUBIKUgQxC5s1"
+                ref: DocumentReference
+                exists: true
+                metadata: SnapshotMetadata
+                _firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue,
+                INTERNAL: {…}, _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+                _key: DocumentKey {path: ResourcePath}
+                _document: Document {key: DocumentKey, version: SnapshotVersion, objectValue:
+                undefined, proto: {…}, converter: ƒ, …}
+                _fromCache: false
+                _hasPendingWrites: false
+                _converter: undefined
+                __proto__: Object
+                */
+
+                // so we have to call " snapShot.data() " in order to see what our data looks like
+                // or:
+                /*
+                createdAt: Timestamp {seconds: 1584064599, nanoseconds: 362000000}
+                displayName: "Roger Hall"
+                email: "rogerhall123@gmail.com"
+                __proto__: Object
+                */
+                
+                // and we created these key value pairs in the last lecture and stored them
+                // in the database so " snapShot.data() " is the main thing we need to use but
+                // we see we do not have the id but the snapShot object itself contained the
+                // id of where we currently are in our userRef and this id was also the id of
+                // our DocumentSnapshot object ( please see above )
+
+                // so we need to use these 2 things combined: (1) the id of where we are currently
+                // in our database and this location in the database is represented by our userRef
+                // and (2) the data or key value pairs that are stored in our Firestore database
+                // at this specific location or userRef
+
+                // so we need to use these 2 things combined and then call setState() of our
+                // current user or " currentUser " and we do this below
+
+                // so change this:
+                /*
+                userRef.onSnapshot( ( snapShot ) => {
+                    console.log( snapShot.data() );
+                } );
+                */
+
+                // to this:
+                // and what we are going to do is call setState below and pass in an object
+                userRef.onSnapshot( ( snapShot ) => {
+
+                        // so below we are creating a new object that has all the properties and
+                        // corresponding values that we want ( we get those key value pairs
+                        // from snapShot.data() ) and the id that we want ( we get the id from
+                        // snapShot.id )
+                        this.setState(
+                            {
+                                currentUser : {
+                                    id : snapShot.id,
+                                    ...snapShot.data()
+                                }
+                            },
+                            // had to do a second function in order to get the correct
+                            // this.state ( please see notes below )
+                            // comment out based on changes below
+                            /*
+                            () => {
+                                console.log( this.state );                          
+                            }
+                            */
+                        );
+
+
+                        // lecture 93: Sign Up with Email and Password
+                        // -- Mark 11 --
+                        // now let's see if we are saving the correct user profile when we fill
+                        // out the sign up form and to test this out let's do
+                        // " console.log( this.state ); " so that whenever the state changes
+                        // we can see the changes in the console so let's open up the console and
+                        // see what happens when we fill out the sign up form
+                        console.log( this.state );
+
+                        // however, before we fill out the sign up form we see the following
+                        // in the console or we see the currentUser object:
+                        /*
+                        {currentUser: {…}}
+                        currentUser:
+                            id: "NLszUUbnVGfP0krGUBIKUgQxC5s1"
+                            createdAt: Timestamp {seconds: 1584840986, nanoseconds: 546000000}
+                            displayName: "Roger Hall"
+                            email: "rogerhall123@gmail.com"
+                            __proto__: Object
+                        __proto__: Object
+                        */
+
+                        // and our currentUser as represented above is set because we are
+                        // signed in so let's sign out and after we sign out and look in
+                        // the console we see " null " from line 602 which line is
+                        // " console.log( userAuth ); "
+
+                        // so now let's sign up and create a new account and see if it works
+                        // so Yihua used:
+                        // Display Name : Mike
+                        // Email : mike@gmail.com
+                        // Password : 1234
+                        // Confirm Password : 12345
+
+                        // but first let's make sure we get an alert when our passwords don't
+                        // match ( see above ) and after we press the Sign Up button we see
+                        // our alert: " Password does not match confirm password. Please try
+                        // again. "
+
+                        // however, before we try this again we need to enable the email and
+                        // password section inside firebase so go to our project in firebase
+                        // and then click on the authentication tab and then click on the
+                        // " Sign-in method " heading tab and then click on the
+                        // " Email/Password " line item and then enable Email/Password and
+                        // then click the Save button and now we will have:
+                        // Provider                 Status
+                        // Email/Password           Enabled
+
+                        // remember we could enable the " Email link " ( the second option )
+                        // which provide email address verification but we don't want to do
+                        // that here
+
+                        // so let's fill out the sign up form with the following information:
+                        // Display Name : Mike
+                        // Email : mike@gmail.com
+                        // Password : 12341234
+                        // Confirm Password : 12341234
+
+                        // and it worked and the result in the console is:
+                        /*
+                        {currentUser: {…}}
+                            currentUser:
+                            id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
+                            createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
+                            displayName: "Mike"
+                            email: "mike@gmail.com"
+                            __proto__: Object
+                        __proto__: Object
+                        */
+                        
+
+// now under the authenication tab in firebase, I see:
+// Identifier               Providers       Created         Signed In       User UID	 
+// mike@gmail.com           mail icon       Mar 21, 2020    Mar 21, 2020    AgKTz3u1GgXabXRJxBqd4l7qwxb2
+// rogerhall123@gmail.com   Google icon     Dec 26, 2019    Mar 15, 2020    NLszUUbnVGfP0krGUBIKUgQxC5s1
+
+
+// now under the database tab in firebase, I see:
+// + Start collection       + Add document                  + Start collection
+//                                                          + Add field
+// users                    3BbNWJnDQ6KuXrz3B34I
+//                          AgKTz3u1GgXabXRJxBqd4l7qwxb2    createdAt : March 21, 2020 at 9:13:09 PM UTC-6
+//                                                          displayName : "Mike"
+//                                                          email : " mike@gmail.com "
+//                          NLszUUbnVGfP0krGUBIKUgQxC5s1
+
+
+
+                        // now Yihua recommends we delete the first user or the one we created
+                        // manually and just keep the user that was created with sign in with
+                        // Google and the one we just created with email and password
+
+                        // so now our datebase looks like:
+// now under the database tab in firebase, I see:
+// + Start collection       + Add document                  + Start collection
+//                                                          + Add field
+//
+// users                    AgKTz3u1GgXabXRJxBqd4l7qwxb2    createdAt : March 21, 2020 at 9:13:09 PM UTC-6
+//                                                          displayName : "Mike"
+//                                                          email : " mike@gmail.com "
+//
+//                          NLszUUbnVGfP0krGUBIKUgQxC5s1    createdAt : March 21, 2020 at 7:47:36 PM UTC-6
+//                                                          displayName : "Roger Hall"
+//                                                          email : "rogerhall123@gmail.com"
+
+
+                        // now, let's commit our code before we implement sign in with email
+                        // and password
+
+                        // so let's do:
+                        // Rogers-iMac:crown_clothing Home$ git status
+                        // Rogers-iMac:crown_clothing Home$ git add .
+                        // Rogers-iMac:crown_clothing Home$ git commit -m " implemented firebase
+                        // utils and included the ability to store authenticated users into
+                        // our firestore database "
+                        // Rogers-iMac:crown_clothing Home$ git push origin master
+
+                        // now if I go to my " crown-clothing " project in GutHub, I see the
+                        // changes were uploaded sucessfully
+
+                        // End of -- Mark 11 --
+
+                    }
+                );
+
+                // so just to make we are getting everything, let's do:
+                // console.log( this.state ); above
+
+                // now switching topics => above we are checking to make sure our userAuth exist
+                // ( i.e. if ( userAuth ) {} ) before running the code above but we also want
+                // to make sure that our app knows or is aware if the userAuth is " null ",
+                // meaning the user has signed out so if the useAuth object comes back and it
+                // is null then we want to run the following else statement:
+                
+                // remember, in the else statement we want to make sure the we set currentUser
+                // equal to " null "
+            }
+
+            else {
+
+                // inside the else statement we want to call this.setState again and this time
+                // we want to set currentUser equal to " null " and remember if the currentUser
+                // is equal to null then the user must have signed out and we also know that
+                // if we're inside this else {} block then userAuth must be null
+                this.setState( { currentUser : userAuth } );
+
+            }
+
+            // so what will happen is that if a user signs in we will first check to see if
+            // the if statement above ( i.e. if ( userAuth ) {} ) runs, which means there is
+            // a user that has signed in or userAuth is true and then we will get back a
+            // userRef object from calling the createUserProfileDocument method and remember
+            // the userAuth object is passed into the createUserProfileDocument()
+            // function or " const userRef = await createUserProfileDocument( userAuth ); "
+
+            // so if there is a document then when the createUserProfileDocument method runs
+            // we will simply get back the userRef but if there is no document then we will
+            // create a new object and / or document in the specified location and we created
+            // this new object in the firebase.utils.js file ( remember we created the try
+            // catch block below in the last lecture inside the createUserProfileDocument()
+            // method in the firebase.utils.js file ):
+            /*
+            try {
+                // so let's await our userRef object and call .set() or the create method or the
+                // " c " in the crud acronym and we will create an object with the following
+                // properties: displayName, email, createdAt ( implicit in this is the
+                // corresponding values ) and we will spread in any additional data that we may
+                // need and remember additionalData will be an object
+                await userRef.set(
+                    {
+                        displayName,
+                        email,
+                        createdAt,
+                        ...additionalData
+                    }
+                );
+    
+            } catch( error ) {
+                // and if we have any issues in the try block above we will console.log
+                // " error creating user " and log out an error message as well
+                console.log( 'error creating user', error.message );
+            }
+            */
+
+            // and remember after we run the createUserProfileDocument() method in the
+            // firebase.utils.js file we get back the userRef ( remember the userRef is returned
+            // to us at the bottom of the createUserProfileDocument() method )
+            
+            // now switching topics or coming back to the App.js file we see that we
+            // will subscribe or listen to this userRef for any changes to the data and Yihua
+            // refered to the code below when discussing subscriptions or listening for changes
+            // in the data ( so if the userRef object detects a change in the snapShot object
+            // then this.setState will be updated with the new data and when this.setState changes
+            // then this update will flow to all of the components that rely on the state
+            // of the " currentUser " or " this.state.currentUser ":
+            /*
+            userRef.onSnapshot( ( snapShot ) => {
+                    this.setState(
+                        {
+                            currentUser : {
+                                id : snapShot.id,
+                                ...snapShot.data()
+                            }
+                        },
+                    );
+                }
+            );
+            */
+            
+            // but we will also get back the first state of the data or " snapShot " inside
+            // " userRef.onSnapshot( ( snapShot ) => {} " above and then using snapShot we will
+            // set the state of App.js with the snapShot.id and snapShot.data() and if the user
+            // ever logs out then we will set " currentUser : null " or " currentUser :
+            // userAuth " and we will do that above in the else statement or
+            // " else { this.setState( { currentUser : userAuth } ); } "
+
+            // so now that we have all this set up, let's see what happens but first our
+            // console.log() can't go after setState since setState is asynchronous and may not
+            // have finished running until later or after we execute console.log() above so we
+            // need to move console.log above or " console.log( this.state ); " into setState
+            // as a second parameter because this is the only way we can make sure that setState
+            // is fully called so we have to pass an arrow function into setState() as a second
+            // parameter and then inside the second function we will pass in
+            // " console.log( this.state ); " so make these changes above and then look
+            // at the results in the console
+
+            // after making these changes and going to console I see that we are now setting
+            // the state or updating the state of our current user or currentUser to the
+            // following key value pairs:
+            /*
+            currentUser:
+            id: "NLszUUbnVGfP0krGUBIKUgQxC5s1"
+            createdAt: Timestamp {seconds: 1584221044, nanoseconds: 630000000}
+            displayName: "Roger Hall"
+            email: "rogerhall123@gmail.com"
+            __proto__: Object
+            __proto__: Object
+            */
+
+            // and the currentUser object above represents all the data that we got back from
+            // our database plus the snapShot.id
+
+            // Yihua said the more we practice with theese ref objects and snapshot objects the
+            // more we'll understand the purpose of the ref objects and snapshot objects and this
+            // is pretty much the core of how we use the Firestore library and it's actually
+            // really simple once we understand and master these concepts we just covered
+
+            // now we can comment out the second function to setState above or
+            // " () => { console.log( this.state );  } " since we don't need it anymore and next
+            // we will work on our signup, which deals more with our auth library
+
+            // now that we have done this flow inside App.js, if we add sign up with email
+            // and password this code will work the exact same way for sign up with email and
+            // password because we have compartmentalized our database storage and set state
+            // separately from our authentication and this will make more sense once we start
+            // writing the sign up but Yihua recommends we rewatch these last few videos if we feel
+            // confused about Firebase and Firebase is incredibly powerful but does have a bit
+            // of a learning curve but it is very valuable because working with Firebase is way
+            // easier than trying to spin up our own back end server and provide our own
+            // authentication service so let's tackle sign up next
+
+            // End of -- Mark 10 --
+
+
+            // -- Mark 9 --
+            // lecture 89: Storing User Data in Firebase
+            // now let's use createUserProfileDocument whenever we get back an auth object but first
+            // make the function below asynchronous since we will make an api request to the Firestore
+            // database or change 
+            // " ( user ) => { " to this
+            // " async ( user ) => { " and change
+            // " this.setState( { currentUser : user } ); " to this
+            // " createUserProfileDocument( user ); "
+            // so pass in our user auth object that we know we are getting back from our auth library
+            // and if we were to save and then go back to our application and sign in we would see in
+            // the console that we are getting back this DocumentReference object or:
+            /*
+            DocumentReference {_key: DocumentKey, firestore: Firestore, _converter: undefined,
+            _firestoreClient: FirestoreClient}
+            id: "128fdashadu"
+            parent: CollectionReference
+                id: "users"
+                parent: (...)
+                path: "users"
+                _query: Query {path: ResourcePath, collectionGroup: null, explicitOrderBy: Array(0),
+                filters: Array(0), limit: null, …}
+                firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue, INTERNAL: {…},
+                _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+                _converter: undefined
+                _path: ResourcePath {segments: Array(2), offset: 0, len: 1}
+                __proto__: Query
+            path: "users/128fdashadu"
+            _key: DocumentKey {path: ResourcePath}
+            firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue, INTERNAL: {…},
+            _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+            _converter: undefined
+            _firestoreClient: FirestoreClient {platform: BrowserPlatform, databaseInfo: DatabaseInfo,
+            credentials: FirebaseCredentialsProvider, asyncQueue: AsyncQueue, clientId:
+            "EUAo3SycTIwpmYEzxHWf", …}
+            __proto__: Object
+            */
+
+            // we also see that the id is the id we passed to firestore.doc() in the
+            // firebase.utils.js file or we see " id: "128fdashadu" " and we see we get
+            // back the same path we passed in to firestore.doc() in the firebase.utils.js file
+            // or the " path: "users/128fdashadu" " so we know the location of this
+            // DocumentReference and remember we get this object back even though it does not
+            // exist inside our database and I went to the Firestore database did not see
+            // this object in the database so why do we get this DocumentReference object back
+            // in the console even though it does not exist in the database?
+            // the reason for this is because we use this reference object or DocumentReference object
+            // to tell Firestore whether to save data to this place in our database or to get data
+            // from this location in the database
+
+            // however, remember the queryReference object does not have the actual data
+            // of the collection or document but instead it gives us properties that tell details
+            // about it like the ID or the path of this specific query reference and we saw this
+            // happen above in the " DocumentReference "
+
+            // but what we are also able to see in this DocumentReference is that the parent is a
+            // CollectionReference representing the collection that this document is in and here
+            // we'll see we have " id : " users "" " and " path : " users " "
+
+            // the difference between the DocumentReference and the CollectionReference is that we
+            // will use the DocumentReference object to preform CRUD operations in our Firestore
+            // database and CRUD stands for creating, retrieving, updating and deleting data in
+            // a specific location in our Firestore database
+
+            // so we use documentRef objects to preform our CRUD methods and the CRUD
+            // methods are .set(), .get(), .update() and delete(), respectively
+
+            // when we retrieve the data we are calling .get() and .get() is us pulling out
+            // a snapshot object of that place in the database and the snapshot object was the
+            // second type of object we discussed earlier in the firebase.utils.js file and this
+            // is the second type of object that Firestore can give us back and we will be able
+            // to use this snapshot object in order to determine whether or not there is any data
+            // in the current reference in our Firestore database
+
+            // again, remember the snapshot object is something we get back from calling .get()
+            // or per Yihua's lecture slide " we get the snapshotObject from the referenceObject
+            //  using the .get() method ( i.e. documentRef.get() or collectionRef.get() ) " and
+            // collectionRef.get() gives us back a snapshot of the collection or
+            // collectionRef returns a querySnapshot object and documentRef returns a
+            // documentSnapshot object 
+
+            // remember, we can also add documents to collections using the collectionRef
+            // object and using the .add() method or collectionRef.add();
+
+            // collectionRef.get(); gives us back a snapshot of the collection and we
+            // won't use this much in this course but it is good know it exists and from
+            // documentRef we will get a documentSnapshot object and let's take a look
+            // at this
+
+            // ==============================
+            // GO TO SRC/FIREBASE/FIREBASE.UTILS.JS -- Mark 1
+            // ==============================
+
+            // ==============================
+            // BACK FROM SRC/FIREBASE/FIREBASE.UTILS.JS -- Mark 1
+            // ==============================
+
+            // so now when we call " createUserProfileDocument( user ); " below, our app
+            // initializes and we can see that we don't create a log inside the console
+            // meaning we probably created something in our database and if we go to Firebase
+            // and check the database we will see that there is the new user that we just created
+            // in our firebase.utils.js file or the user with the id
+            // of " NLszUUbnVGfP0krGUBIKUgQxC5s1 " and this user is now
+            // being stored in our Firestore database and if we refresh our browser we see
+            // that we still have this new user
+
+            // right now our database looks like:
+
+            // crown-clothing-25f2b         users                           3BbNWJnDQ6KuXrz3B34I
+
+            // + Start collection           + Add document                  + Start collection
+
+            // users >                      3BbNWJnDQ6KuXrz3B34I >          cartItems
+
+            //                                                              + Add field
+
+            //                                                              displayName: "Yihua"
+
+            //                              NLszUUbnVGfP0krGUBIKUgQxC5s1 >  + Start collection
+
+            //                                                              + Add field
+
+            //                                                              createdAt: March 12, 2020
+            //                                                              at 2:22:30 PM UTC-6
+
+            //                                                              displayName: "Roger Hall"
+
+            //                                                              email: "rogerhall123@gmail.com"
+
+
+            // and remember we are not creating multiple copies of this new user since we are
+            // checking in the firebase.utils.js file or checking to see if the snapShot
+            // at the specified location already exist or not, in other words we call the following
+            // if statement or " if( !snapShot.exist ) {} " and if the snapShot already
+            // exist then we skip the part where we create a new user, which as we know happens
+            // inside the if statement inside the firebase.utils.js file
+
+            // so in summary we are checking to see whether the snapShot already exist and if not
+            // then were making new users inside our database based off the userAuth object
+
+            // now that we have these objects being stored in our database and also being pulled
+            // into our application, let's figure out how we can store this data so we can use
+            // it in our application
+
+            
+            // this.setState( { currentUser : user } );
+
+            // createUserProfileDocument( user );
+
+            // End of -- Mark 9 --
+
+            
 
             // let's log out user to see what it looks like and now when we go back into our
             // application and go to the counsel, we will see our user object in the counsel
@@ -131,8 +746,13 @@ class App extends React.Component {
             // subscription we also need to close the subscription when the application component
             // unmounts in order to prevent memory leaks and to do that go to
             // " unsubscribeFromAuth = null " above and then go to componentWillUnmount below
-            console.log( user );
-        } );
+
+            // after lecture 91, I changed " console.log( user ); " to " console.log( userAuth ); "
+            // so that I could see the userAuth object in the console
+            console.log( userAuth );
+        }
+        );
+
     }
 
     // this method will allow us to unsubscribe from OAuth when the application component

@@ -10,6 +10,25 @@
 // we see the elements are aligned
 // End of -- Mark 1 --
 .sign-in {
+    display               : grid;
+    grid-template-rows    : repeat( 4, auto );
+    grid-template-columns : 380px;
+
+    .title {
+        margin : 10px 0 10px 0;
+    }
+
+    .buttons{
+        display               : grid;
+        grid-template-rows    : auto;
+        grid-template-columns : repeat( 2, auto);
+        justify-content       : space-between;
+    }
+}
+
+// flexbox solution below
+/*
+.sign-in {
     display        : flex;
     flex-direction : column; 
     width          : 380px;
@@ -23,3 +42,4 @@
         justify-content : space-between;
     }
 }
+*/

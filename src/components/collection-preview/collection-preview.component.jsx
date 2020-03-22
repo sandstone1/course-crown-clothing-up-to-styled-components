@@ -62,7 +62,7 @@ const CollectionPreview = ( { title, items } ) => (
         </div>
 
     </div>
-)
+);
 
 // create a default export for our functional component, CollectionPreview
 export default CollectionPreview;

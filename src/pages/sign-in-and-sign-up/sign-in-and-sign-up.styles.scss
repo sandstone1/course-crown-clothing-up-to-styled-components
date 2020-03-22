@@ -1,0 +1,25 @@
+
+.sign-in-and-sign-up {
+    display               : grid;
+    grid-template-rows    : auto;
+    grid-template-columns : repeat( 2, 380px );
+    justify-content       : space-between;
+    width                 : 850px;
+    margin                : 30px auto;
+}
+
+
+/*
+// Yihua styling below
+.sign-in-and-sign-up {
+    display         : flex;
+    justify-content : space-between;
+    width           : 850px;
+    margin          : 30px auto;
+}
+*/
+
+
+// ==============================
+// GO TO SRC/APP.JS -- Mark 11
+// ==============================

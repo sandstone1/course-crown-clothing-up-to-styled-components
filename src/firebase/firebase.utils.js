@@ -14,7 +14,7 @@
 // 'firebase/app', which is the base firebase library  and then import the individual
 // packages below this command or in our case, we want access to the database and
 // authentication services so we import 'firebase/firestore' and 'firebase/auth'
-import firebase, { initializeApp } from 'firebase/app';
+import firebase from 'firebase/app';
 // import in the database
 import 'firebase/firestore';
 // import in authentication
@@ -31,6 +31,265 @@ const config = {
     messagingSenderId : "729289960047",                                // Cloud Messaging
     appId             : "1:729289960047:web:738d376772a4583792bb9a"
 };
+
+
+// -- Mark 1 --
+// lecture 89: Storing User Data in Firebase
+// so the function we are going to write is going to allow us to take that user auth object
+// that we got back from our authentication library and then store the key value pairs we want
+// inside our database
+
+// so the function will be called createUserProfileDocument() and this function
+// will be asynchronous function because we are making an API request and we pass in our
+// userAuth object that we got back from the authentication library and any additional data
+// that we might need and that additional data will come in the form of an object
+
+export const createUserProfileDocument = async ( userAuth, additionalData ) => {
+
+    // now remember when the user signs out we get back null from our userAuth object so
+    // we only want to perform this save to our database if we get back a userAuth object
+    // which means that the user has signed in so the createUserProfileDocument function
+    // has to check and make sure we are getting back a valid object 
+
+    // so if the userAuth does not exist or is " null  " then we want to return from the
+    // createUserProfileDocument function or exit the function and not do anything else
+    if( !userAuth ) {
+        return;
+    }
+
+    // if the userAuth object does exist however then we will query inside Firestore for document
+    // to see if the document already exist but in order for us to do this we need to first
+    // understand what we will get back from Firestore and Firestore will give us back
+    // two potential objects: references or snapshots or queryReference or querySnapshot and they
+    // are botht different objects that do different things in FireStore 
+
+    // first, let's talk about what a query is and a query is simply asking Firestore for a
+    // document or collection from the database and Firestore will return
+    // to us 2 types of objects: references or snapshots and these can be either Document or
+    // Collection versions and remember from the last lecture we called .collection() or .doc()
+    // and passed in a string for the location inside the database for the collection or document
+    // and we can use these objects to determine whether or not there is any data in the specific
+    // database location
+
+    // now a queryReference is simply an object that represents the current place in the database
+    // that we are querying and we can get this queryReference object by calling either:
+    // firestore.doc( '/users/:userId' ); or firestore.collections( '/users' );
+
+    // remember a queryReference object does not have the actual data of the collection or document
+    // instead it has properties that tell us details about collection or document or has the
+    // method we need to get the Snapshot object which will give us the data we are looking for 
+
+
+    // ***************
+
+
+    // right now our database looks like:
+
+    // crown-clothing-25f2b         users                       3BbNWJnDQ6KuXrz3B34I
+
+    // + Start collection           + Add document              + Start collection
+
+    // users >                      3BbNWJnDQ6KuXrz3B34I >      cartItems
+
+    //                                                          + Add field
+
+    //                                                          displayName: "Yihua"
+
+
+    // ***************
+
+
+    // right now our suthentication library looks like:
+
+    // Identifier               Providers       Created         Signed In       User UID	 
+    // rogerhall123@gmail.com   Google          Dec 26, 2019    Mar 14, 2020    NLszUUbnVGfP0krGUBIKUgQxC5s
+
+
+    // ***************
+
+
+    // so let's test this out in console.log() and we'll provide an ID that does not exist
+    // so let's assume we save this file and then import createUserProfileDocument into
+    // app.js
+    // commented out based on changes from below
+    // console.log( firestore.doc(  'users/128fdashadu') );
+
+
+    // ==============================
+    // GO TO SRC/APP.JS -- Mark 9
+    // ==============================
+
+    // ==============================
+    // BACK FROM SRC/APP.JS -- Mark 9
+    // ==============================
+
+    // first let's move " console.log( firestore.doc( 'users/128fdashadu' ) ); "
+    // below into a const of somekind or do
+    // " const userRef = firestore.doc( `users/${ userAuth.uid }` ); "
+    // commented out based on changes from below
+    // const userRef = firestore.doc( 'users/128fdashadu' );
+
+    // now the question is how do we get the snapshot and the way we do that
+    // is by doing " const snapShot = await userRef.get(); " and we will
+    // " await " the result from userRef.get();    
+    // commented out based on changes from below
+    // const snapshot = await userRef.get();
+
+    // now let's log the snapshot and take a look at what were getting
+    // commented out based on changes from below
+    // console.log( snapshot );
+
+    // what we get back is:
+    /*
+    DocumentSnapshot {_firestore: Firestore, _key: DocumentKey, _document: null,
+    _fromCache: false, _hasPendingWrites: false, …}
+    id: "128fdashadu"
+    ref: DocumentReference
+    exists: false
+    metadata: SnapshotMetadata
+    _firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue, INTERNAL:
+    {…}, _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+    _key: DocumentKey {path: ResourcePath}
+    _document: null
+    _fromCache: false
+    _hasPendingWrites: false
+    _converter: undefined
+    __proto__: Object
+    */
+
+    // so we get a DocumentSnapshot object back and on in the object is a property called
+    // " exists " and this property tells us whether or not we have any data in the snapshot
+    // and the id property tells us the id of the document and metadata gives us information about
+    // when the document was created and whether or not it is cached and whether there are any
+    // pending writes, meaning anything that needs to be updated to this snapshot and ref
+    // references the document reference object and remember we queried our snapshot from
+    // the document reference object or we did " const snapshot = await userRef.get(); " and
+    // userRef is the document reference object, I believe
+    
+    // now instead of using the fake id or " const userRef = firestore.doc( 'users/128fdashadu' ); "
+    // what we want to the use is the userAuth uid because we want to see if the userAuth
+    // object that we get back from the authentication library already exist in our database
+    // so let's change userRef above from
+    // " const userRef = firestore.doc( 'users/128fdashadu' ); " to
+    // " const userRef = firestore.doc( `users/${ userAuth.uid }` ); "
+    // and below we use string interpolation
+    // from Dmitri Pavlutin: " In JavaScript, the template literals
+    // ( strings wrapped in backticks `` ) and ${ expression } as a placeholder perform the
+    // string interpolation " and " The expression inside the placeholder is evaluated during
+    // runtime, and the result is inserted into the string " and " The placeholder has a
+    // special format: ${ expressionToEvaluate }. The expression inside the placeholder can
+    // be of any kind:
+    // variables: ${ myVar }
+    // operators: ${ n1 + n2 }, ${ cond ? 'val 1' : 'val 2' }
+    // and even function calls ${ myFunc( 'argument' ) } "
+    // so we use string interpolation to get the value for " userAuth.uid "
+    const userRef = firestore.doc( `users/${ userAuth.uid }` );
+
+    // and we will get back the userRef at that location and then we will get a snapshot and
+    // using that snapshot we will be able to figure out whether or not there is any data
+    // in that location or we will see whether or not we have already stored this user
+    // object ( i.e. userAuth ) that we have previously authenticated and if we run this
+    // snapShot again or:
+    const snapShot = await userRef.get();
+    console.log( snapShot );
+
+    // we get the following back:
+    /*
+    DocumentSnapshot {_firestore: Firestore, _key: DocumentKey, _document: null,
+    _fromCache: false, _hasPendingWrites: false, …}
+    id: "NLszUUbnVGfP0krGUBIKUgQxC5s1"
+    ref: DocumentReference
+    exists: false
+    metadata: SnapshotMetadata
+    _firestore: Firestore {_firebaseApp: FirebaseAppImpl, _queue: AsyncQueue,
+    INTERNAL: {…}, _databaseId: DatabaseId, _persistenceKey: "[DEFAULT]", …}
+    _key: DocumentKey {path: ResourcePath}
+    _document: null
+    _fromCache: false
+    _hasPendingWrites: false
+    _converter: undefined
+    __proto__: Object
+    */
+
+    // now we see that exist is still false but now we are getting back the same id as the id
+    // we were getting back from our auth library or authentication library
+
+    // so now that we have the " snapShot " let's check and see if the
+    // snapshot exist and we do that within an if statement and please see below:
+    if ( !snapShot.exists ) {
+        
+        // so above we are sayng if the snapShot does not exist or the data does not exist
+        // then we want to actually create a piece of data in this location and we will
+        // create it using our userRef object because remember in order to create or do
+        // CRUD operations we have to use the DocumentReference object and not the snapshot
+        // because the snapshot simply represent the data
+
+        // so below we are basically creating a new user with informaiton from our
+        // userAuth object
+
+        // so before we create this piece of data let's determine the data we want to use
+        // in order to create this document and what we want is the displayName and email
+        // from our userAuth object and remember the userAuth object was that giant object
+        // we logged ealier
+        const { displayName, email } = userAuth;
+        // and when want to know inside our database when we made that document so let's call
+        // new Date(); and by doing this we are creating a new JavaScript date object and this
+        // object tells us the current date and time as to when this
+        // " const createdAt = new Date(); " was invoked
+        const createdAt = new Date();
+
+        // so what we are going is create a new user object with the following key value pairs
+        // and we will wrap this object in a try catch block and below we will make an
+        // asynchronous request to our database and store this data in our database at the
+        // userRef location or " firestore.doc( `users/${ userAuth.uid }` ) " or
+        // " firestore.doc( `users/NLszUUbnVGfP0krGUBIKUgQxC5s1` ); "
+        try {
+            // so let's await our userRef object and call .set() or the create method or the
+            // " c " in the crud acronym and we will create an object with the following
+            // properties: displayName, email, createdAt ( implicit in this is the
+            // corresponding values ) and we will spread in any additional data that we may
+            // need and remember additionalData will be an object
+            await userRef.set(
+                {
+                    displayName,
+                    email,
+                    createdAt,
+                    ...additionalData
+                }
+            );
+ 
+        } catch( error ) {
+            // and if we have any issues in the try block above we will console.log
+            // " error creating user " and log out an error message as well
+            console.log( 'error creating user', error.message );
+        }
+
+        // so again if the snapshot does not exist then we will create data in the above
+        // referenced location inside the Firestore database
+
+        // so we are checking to see if there is any data in the userRef location or
+        // " const userRef = firestore.doc( `users/${ userAuth.uid }` ); " and if there
+        // isn't any data in this location then we will create a new user using data
+        // from the userAuth object
+
+    }
+
+    // lastly make sure we return the userRef in case we need to use it later somewhere
+    // else in our code base
+    
+    // userRef is located at " const userRef : firebase.firestore.DocumentReference; "
+    return userRef;
+
+
+    // ==============================
+    // GO TO SRC/APP.JS -- Mark 9
+    // ==============================    
+
+
+}
+
+// End of -- Mark 1 --
+
 
 
 // from Firebase: " function initializeApp => Creates and initializes a Firebase app instance. "

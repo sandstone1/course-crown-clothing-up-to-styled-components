@@ -7,7 +7,7 @@ $sub-color  : grey;
 
     font-size : 12px;
     color     : $main-color; 
-};
+}
 
 .group {
     position : relative;
@@ -31,7 +31,7 @@ $sub-color  : grey;
 
         &:focus {
             outline : none;
-        };
+        }
 
         // The general sibling combinator (~) separates two selectors and matches the
         // second element only if it follows the first element (though not necessarily
@@ -45,12 +45,12 @@ $sub-color  : grey;
         // the movement a nice feel
         &:focus ~ .form-input-label {
             @include shrinkLabel();
-        };
-    };
+        }
+    }
 
     input[ type='password' ] {
         letter-spacing : 0.3em;
-    };
+    }
 
     .form-input-label {
         position : absolute;
@@ -65,11 +65,12 @@ $sub-color  : grey;
         // transition : all will target the top, font-size and color properties
         transition     : all 300ms ease;
         
-        // not sure why this is here
+        // this is here so that if the user takes the focus off the input field the
+        // form label stays in the same position or top : 10px and left : 5px
         &.shrink {
             @include shrinkLabel();
         }
-    };
+    }
 
 }
 

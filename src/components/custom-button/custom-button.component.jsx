@@ -67,7 +67,7 @@ const CustomButton = ( { isGoogleSignIn, children, ...otherProps } ) => (
     // component ) as long as both the button and input elements have their type attribute set
     // equal to " submit " or " type = "submit" "
     <button
-      className={ `${ isGoogleSignIn ? "google-sign-in" : '' } custom-button` } { ...otherProps }
+      className={ `${ isGoogleSignIn ? 'google-sign-in' : '' } custom-button` } { ...otherProps }
     >
         { children }
     </button>

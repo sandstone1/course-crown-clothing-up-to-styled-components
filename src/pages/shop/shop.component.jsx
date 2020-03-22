@@ -301,7 +301,7 @@ class ShopPage extends React.Component {
 
         );
         */
-        return(
+        return (
 
             <div className="shop-page">
             {

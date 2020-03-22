@@ -15,7 +15,7 @@ import React from 'react';
 import './collection-item.styles.scss';
 
 // don't need any state so make another functional component
-const CollectionItem = ( { id, name, imageUrl, price } ) => (
+const CollectionItem = ( { name, imageUrl, price } ) => (
 
     <div className="collection-item">
 

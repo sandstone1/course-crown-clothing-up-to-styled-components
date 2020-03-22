@@ -1,4 +1,4 @@
-
+/*
 .header {
     display         : flex;
     justify-content : space-between;
@@ -23,3 +23,35 @@
         }
     }
 }
+*/
+
+
+
+
+.header {
+
+    display               : grid;
+    grid-template-rows    : auto;
+    grid-template-columns : repeat( 2, max-content);
+    justify-content       : space-between;
+    align-items           : center;    
+    height                : 70px;
+    margin                : 0 0 25px 0;
+
+    .options {
+
+        display               : grid;
+        grid-template-rows    : auto;
+        grid-template-columns : repeat( 3, max-content);
+        // grid-column-gap    : 20px;
+
+        > .option {
+            padding : 10px 15px 10px 15px;
+
+            cursor : pointer;
+        }
+
+    }
+
+}
+
