@@ -44,6 +44,15 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 // End of -- Mark 7 & 9 --
 
 
+
+// -- Mark 12 --
+// lecture 104: mapDispatchToProps
+// first, we need to import in connect and we will use the connect function below
+import { connect } from 'react-redux';
+import { setCurrentUser } from './redux/user/user.actions';
+// End of -- Mark 12 --
+
+
 // -- Mark 4 -- continued
 // comment out HatsPage
 /*
@@ -76,7 +85,7 @@ class App extends React.Component {
     // add in state
     state = {
         currentUser : null
-    }
+    };
 
     // see notes below
     // here we are setting a property called unsubscribeFromAuth on our class component or
@@ -275,22 +284,113 @@ class App extends React.Component {
                         // corresponding values that we want ( we get those key value pairs
                         // from snapShot.data() ) and the id that we want ( we get the id from
                         // snapShot.id )
-                        this.setState(
+                        
+                        // -- Mark 12 -- continued
+                        // lecture 104: mapDispatchToProps
+                        // change this.setState() to this.props.setCurrentUser()
+                        this.props.setCurrentUser(
                             {
-                                currentUser : {
-                                    id : snapShot.id,
-                                    ...snapShot.data()
-                                }
-                            },
-                            // had to do a second function in order to get the correct
-                            // this.state ( please see notes below )
-                            // comment out based on changes below
-                            /*
-                            () => {
-                                console.log( this.state );                          
+                                id : snapShot.id,
+                                ...snapShot.data()
                             }
-                            */
                         );
+
+                        // and this will result in dispatching an action object that looks like:
+                        /*
+                            {
+                                type    : 'SET_CURRENT_USER',
+                                payload :   {
+                                                id : snapShot.id,
+                                                ...snapShot.data()
+                                            }
+                            }
+                        */
+
+                        // now if we look in our console log we will see the following ( this comes
+                        // from redux logger ):
+                        /*
+action SET_CURRENT_USER @ 18:28:26.218
+redux-logger.js:388  prev state {user: {…}}user: {currentUser: null}
+    __proto__: Object
+redux-logger.js:392  action     {type: "SET_CURRENT_USER", payload: null}
+    type:"SET_CURRENT_USER"payload: null
+    __proto__: Object
+redux-logger.js:401  next state {user: {…}}user: currentUser: null
+    __proto__: Object__proto__: Object
+                        */
+
+                        // and these are the messages we are getting from redux logger and logger
+                        // tells us the state of redux after any action is fired and " prev state "
+                        // is the state before the action is fired and " action " is the action
+                        // itself and " next state " is the state after the action is fired
+
+                        // after I sign in with " Mike " the console.log looks like the following:
+                        /*
+
+action SET_CURRENT_USER @ 18:42:20.269
+
+redux-logger.js:388  prev state {user: {…}}
+                                    user: currentUser: null
+                                        __proto__: Object
+                                    __proto__: Object
+
+redux-logger.js:392  action     {type: "SET_CURRENT_USER", payload: {…}}
+                                    type: "SET_CURRENT_USER"
+                                    payload:
+                                        id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
+                                        createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
+                                        displayName: "Mike"
+                                        email: "mike@gmail.com"
+                                            __proto__: Object
+                                        __proto__: Object
+
+redux-logger.js:401   next state {user: {…}}
+                                    user: 
+                                        currentUser:
+                                            id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
+                                            createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
+                                            displayName: "Mike"
+                                            email: "mike@gmail.com"
+                                            __proto__: Object
+                                        __proto__: Object
+                                    __proto__: Object
+
+                        */
+
+                        // and " action " will give us our object that we are storing in our database
+                        // and in " next state " we will see that our reducer is up to date with our
+                        // new modified database object and we see that our Header component is
+                        // working properly
+                        
+                        // so once we sign in we see " Sign Out " in our
+                        // header so we brought our state into our components but now there is a
+                        // seperation of concerns so our App component is updating our user
+                        // reducer by dispatching a setCurrentUser action with the snapShot
+                        // information as shown above and tehn our user reducer
+                        // is updating our root reducer which is then updating our Header component
+                        // with the current state object
+
+                        // if we sign out then we will see " payload : null " in " action " and
+                        // " currentUser : null " in " next state "
+
+                        // now we are going to do this pattern many times because practice makes
+                        // perfect and this pattern will be incredibly useful to us in the
+                        // following sections as we build our application
+
+                        // now let's commit our code and move on
+
+                        // so let's do:
+                        // Rogers-iMac:crown_clothing Home$ git status
+                        // Rogers-iMac:crown_clothing Home$ git add .
+                        // Rogers-iMac:crown_clothing Home$ git commit -m " added redux and
+                        // and implemented userReducer and userActions to our Header and App
+                        // components "
+                        // Rogers-iMac:crown_clothing Home$ git push origin master
+
+                        // now if I go to my " crown-clothing " project in GutHub, I see the
+                        // changes were uploaded sucessfully
+
+                        // End of -- Mark 12 --
 
 
                         // lecture 93: Sign Up with Email and Password
@@ -342,7 +442,7 @@ class App extends React.Component {
                         // Email/Password           Enabled
 
                         // remember we could enable the " Email link " ( the second option )
-                        // which provide email address verification but we don't want to do
+                        // which provides email address verification but we don't want to do
                         // that here
 
                         // so let's fill out the sign up form with the following information:
@@ -355,14 +455,14 @@ class App extends React.Component {
                         /*
                         {currentUser: {…}}
                             currentUser:
-                            id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
-                            createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
-                            displayName: "Mike"
-                            email: "mike@gmail.com"
+                                id: "AgKTz3u1GgXabXRJxBqd4l7qwxb2"
+                                createdAt: Timestamp {seconds: 1584846789, nanoseconds: 493000000}
+                                displayName: "Mike"
+                                email: "mike@gmail.com"
+                                __proto__: Object
                             __proto__: Object
-                        __proto__: Object
                         */
-                        
+
 
 // now under the authenication tab in firebase, I see:
 // Identifier               Providers       Created         Signed In       User UID	 
@@ -437,7 +537,22 @@ class App extends React.Component {
                 // we want to set currentUser equal to " null " and remember if the currentUser
                 // is equal to null then the user must have signed out and we also know that
                 // if we're inside this else {} block then userAuth must be null
-                this.setState( { currentUser : userAuth } );
+
+                // -- Mark 12 -- continued
+                // lecture 104: mapDispatchToProps
+                // change this.setState( { currentUser : userAuth } ); to 
+                // this.props.setCurrentUser( userAuth );
+                this.props.setCurrentUser( userAuth );
+
+                // and this will result in dispatching an action object that looks like:
+                /*
+                    {
+                        type    : 'SET_CURRENT_USER',
+                        payload : userAuth or null
+                    }
+                */
+
+                // End of -- Mark 12 --
 
             }
 
@@ -813,18 +928,79 @@ class App extends React.Component {
             // state to the <Header /> component below and we pass currentUser in as a prop
             // and this.state.currentUser could be (1) null or could be (2) a user object
             // and now go to our <Header /> component
+
+            // -- Mark 9 --
+            // lecture 103: connect() and mapStateToProps
+            // change " <Header currentUser={ this.state.currentUser } /> " to " <Header />  "
+            // and if we go to our Header component on our site we will see that we are no longer
+            // signed in because as of now currentUser is " null " and remember we will use
+            // connect and mapStateToProps anywhere we need state from our root reducer and we
+            // will use this pattern extensively in future components
             <div>
-                <Header currentUser={ this.state.currentUser } />
+                <Header />
                 <Switch>
                     <Route path="/"     exact={ true } component={ HomePage             } />
                     <Route path="/shop"                component={ ShopPage             } />
                     <Route path="/signin"              component={ SignInAndSignUpPage  } /> 
                 </Switch>        
             </div>
-            // End of -- Mark 3 and Mark 4 and Mark 5 and Mark 6 and Mark 7 and Mark 8--
+            // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8 and Mark 9 --
         );
 
     }
 }
 
-export default App;
+
+// -- Mark 12 -- continued
+// lecture 104: mapDispatchToProps
+// were going to connect our App component to the outcome of our first connect call using
+// null as the first argument since we don't need mapStateToProps in App.js but we do need
+// the second argumnent, which is mapDispatchToProps and let's create the mapDispatchToProps
+// function below
+
+// the mapDispatchToProps functions takes the dispatch property as an argument and then we will
+// return an object and let's import in setCurrentUser above and in our object below we will set 
+// our property equal to setCurrentUser and setCurrentUser will be equal to a function that takes
+// the user object as an argument and then calls the dispatch function and the argument to our
+// dispatch function is our setCurrentUser action object and we will pass that action object
+// to every reducer
+
+// now we can eliminate our state object above or " state = { currentUser : null }; " and then
+// we will replace our setState code or 
+
+/*
+this.setState(
+    {
+        currentUser : {
+            id : snapShot.id,
+            ...snapShot.data()
+        }
+    }
+);
+*/
+
+// with our setCurrentUser action code so replace the above this.setState() code with
+
+/*
+this.props.setCurrentUser(
+    {
+        id : snapShot.id,
+        ...snapShot.data()
+    }
+);
+*/
+
+// so we are still passing in our snapShot object but now we are setting the currentUser
+// value equal to the above object
+const mapDispatchToProps = ( dispatch ) => ( 
+    {
+        setCurrentUser : ( user ) => dispatch( setCurrentUser( user ) )
+    } 
+);
+
+
+
+export default connect( null, mapDispatchToProps )( App );
+// End of -- Mark 12 --
+
+

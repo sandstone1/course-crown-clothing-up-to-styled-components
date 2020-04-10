@@ -64,7 +64,7 @@ class SignIn extends React.Component {
         // and then let's try to sign in with the account we created in lecture 92 or
         // the user account with an email of " mike@gmail.com " and password of
         // " 12341234 " and now if we sign in with this account we see " SIGN IN "
-        // changes to " SIGN OUT " and if we check the console we see that our user
+        // change to " SIGN OUT " and if we check the console we see that our user
         // has been updated with the currentUser of:
         /*
         {currentUser: {…}}
@@ -173,10 +173,10 @@ class SignIn extends React.Component {
         // End of -- Mark 4 --
         return (
             <div className="sign-in">
-                <h2>I already have an account</h2>
-                <span className="title">Sign in with your email and password</span>
+                <h2 className="sign-in--title">I already have an account</h2>
+                <span>Sign in with your email and password</span>
 
-                <form onSubmit={ this.handleSubmit } >
+                <form className="sign-in--form" onSubmit={ this.handleSubmit } >
                     <FormInput
                         name="email"
                         type="email"
@@ -194,7 +194,7 @@ class SignIn extends React.Component {
                         required
                     />
 
-                    <div className="buttons">
+                    <div className="sign-in--buttons">
                         <CustomButton
                             type="submit"
                         >

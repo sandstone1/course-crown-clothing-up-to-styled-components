@@ -30,13 +30,13 @@ class SignUp extends React.Component {
         const { displayName, email, password, confirmPassword } = this.state;
 
         // let's do some validation and first check to see if password is not strictly equal to
-        // confirmPassword; in other words, they don't match
+        // confirmPassword; in other words, they don't match so show an alert
         if ( password !== confirmPassword ) {
 
             alert( "Password does not match confirm password. Please try again." );
 
             // if password does not equal confirm password then we want to return from this
-            // function and do anything else until the user correct the password issue
+            // function and not do anything else until the user corrects the password issue
             return;
 
         }
@@ -51,19 +51,24 @@ class SignUp extends React.Component {
             // the user will be signed into the application and the creation of the user account
             // can fail if the account already exists or the password is not valid
 
-            // now we will get back a userAuth object and the userAuth object will be attached to
-            // the key " user ", which is why we want to destructure " user "
+            // now when we call " await auth.createUserWithEmailAndPassword( email, password ); "
+            // the return value or the value we get back is a userAuth object or more specifically
+            // we will get back an object called " user " and user will contain various key value
+            // pairs and one of the keys is called " user " and this key or property looks exactly
+            // like our userAuth object and that's why user.user can be the first argument in the
+            // createUserProfileDocument() function below and it works perfectly fine or in other
+            // words it works just like having userAuth as the first argument
 
             // we will pass the arguments: " email " and " password " to the
             // createUserWithEmailAndPassword function and email and password come from
             // destructuring our state object above
-            const { user } = await auth.createUserWithEmailAndPassword( email, password );
+            const user = await auth.createUserWithEmailAndPassword( email, password );
 
             // once we get " user " back we want to run the createUserProfileDocument()
-            // method and we want to pass in the following arguments: " user " and the
+            // method and we want to pass in the following arguments: " user.user " and the
             // " displayName " object and in this case displayName is the key and the key
             // has a corresponding value
-            await createUserProfileDocument( user, { displayName } );
+            await createUserProfileDocument( user.user, { displayName } );
 
             // now if " createUserProfileDocument( user, { displayName } ); " succeeds then
             // we are going to want to update our state so let's change
@@ -116,6 +121,7 @@ class SignUp extends React.Component {
 
                 <h2 className="sign-up--title">I do not have an account</h2>
                 <span>Sign up with your email and password</span>
+
                 <form className="sign-up--form" onSubmit={ this.handleSubmit } >
 
                     <FormInput

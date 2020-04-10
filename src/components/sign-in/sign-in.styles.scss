@@ -11,14 +11,14 @@
 // End of -- Mark 1 --
 .sign-in {
     display               : grid;
-    grid-template-rows    : repeat( 4, auto );
+    grid-template-rows    : 53px 22px auto auto;
     grid-template-columns : 380px;
 
-    .title {
+    &--title {
         margin : 10px 0 10px 0;
     }
 
-    .buttons{
+    &--buttons {
         display               : grid;
         grid-template-rows    : auto;
         grid-template-columns : repeat( 2, auto);
