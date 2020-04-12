@@ -12,7 +12,13 @@ import HomePage from './pages/homepage/homepage.component';
 
 // -- Mark 3 --
 // lecture 65: Routing in Our Project
-import { Route, Switch } from 'react-router-dom';
+
+// -- Mark 13 --
+// lecture 105: User Redirect and User Action Type
+// we will need the Redirect component from react-router-dom
+import { Route, Switch, Redirect } from 'react-router-dom';
+// End of -- Mark 13 --
+
 
 // -- Mark 4 --
 // lecture 69: Shop Page
@@ -51,6 +57,7 @@ import { auth, createUserProfileDocument } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/user/user.actions';
 // End of -- Mark 12 --
+
 
 
 // -- Mark 4 -- continued
@@ -383,7 +390,7 @@ redux-logger.js:401   next state {user: {…}}
                         // Rogers-iMac:crown_clothing Home$ git status
                         // Rogers-iMac:crown_clothing Home$ git add .
                         // Rogers-iMac:crown_clothing Home$ git commit -m " added redux and
-                        // and implemented userReducer and userActions to our Header and App
+                        // implemented userReducer and userActions to our Header and App
                         // components "
                         // Rogers-iMac:crown_clothing Home$ git push origin master
 
@@ -936,19 +943,79 @@ redux-logger.js:401   next state {user: {…}}
             // signed in because as of now currentUser is " null " and remember we will use
             // connect and mapStateToProps anywhere we need state from our root reducer and we
             // will use this pattern extensively in future components
+
+
+            // -- Mark 13 -- continued
+            // lecture 105: User Redirect and User Action Type
+            // change " <Route path="/signin" component={ SignInAndSignUpPage } /> " to
+            /*
+                <Route  path="/signin"
+                        exact={ true }
+                        render={ () =>
+                           this.props.currentUser ? (
+                               <Redirect to="/" />
+                           ) : (
+                               <SignInAndSignUpPage />
+                           )
+                        }
+                />
+            */
+            // so now we get redirected to the home page after we sign in or if we type in the
+            // following url " localhost/3000/signin " we will see the sign in and sign up page
+            // for an instant and then we get automatically redirected to the home page
+
+            // now that our redirect is set up we need to modify our user action
+            // ==============================
+            // GO TO SRC/REDUX/USER/USER.TYPES.JS
+            // ==============================
             <div>
                 <Header />
                 <Switch>
-                    <Route path="/"     exact={ true } component={ HomePage             } />
-                    <Route path="/shop"                component={ ShopPage             } />
-                    <Route path="/signin"              component={ SignInAndSignUpPage  } /> 
+                    <Route  path="/"
+                            exact={ true }
+                            component={ HomePage }
+                    />
+                    <Route  path="/shop"
+                            component={ ShopPage }
+                    />
+                    <Route  path="/signin"
+                            exact={ true }
+                            render={ () =>
+                                this.props.currentUser ? (
+                                    <Redirect to="/" />
+                                ) : (
+                                    <SignInAndSignUpPage />
+                                )
+                           }
+                    />
                 </Switch>        
             </div>
-            // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8 and Mark 9 --
+            // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8 and Mark 9 and Mark 13--
         );
-
     }
 }
+
+
+
+// -- Mark 13 -- continued
+// lecture 105: User Redirect and User Action Type
+// we are going to need the currentUser from redux so we need to use mapStateToProps below in
+// order to get the currentUser value and
+// we are going to destructure our " user " off of " state " and remember " user " equals
+// " user : userReducer " or the userReducer inside the root-reducer.js file so instead of
+// writing ( state.user ) we will write ( { user } ) and we have to write it this way because
+// we can't write ( state.user ) since this results in an error
+
+// change " connect( null, mapDispatchToProps ) " to
+// " connect( mapStateToProps, mapDispatchToProps ) " below
+
+// now we have access to this.props.currentUser and now go the routes above
+const mapStateToProps = ( { user } ) => (
+    {
+        currentUser : user.currentUser
+    }
+);
+
 
 
 // -- Mark 12 -- continued
@@ -1000,7 +1067,5 @@ const mapDispatchToProps = ( dispatch ) => (
 
 
 
-export default connect( null, mapDispatchToProps )( App );
-// End of -- Mark 12 --
-
-
+export default connect( mapStateToProps, mapDispatchToProps )( App );
+// End of -- Mark 12 and 13 --

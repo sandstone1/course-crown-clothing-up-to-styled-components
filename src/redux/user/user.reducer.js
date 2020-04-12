@@ -1,5 +1,16 @@
 
 
+
+// -- Mark 1 --
+// lecture 105: User Redirect and User Action Type
+import { UserActionTypes } from './user.types';
+
+// change the case below from " case 'SET_CURRENT_USER' : " to
+// " case UserActionTypes.SET_CURRENT_USER : " and by setting the case value to
+// a constant we will prevent typos and let's do the same thing in our user.actions.js file
+// End of -- Mark 1 --
+
+
 // ==============================
 // COMING FROM SRC/INDEX.JS
 // ==============================
@@ -41,7 +52,7 @@ const userReducer = ( state = INITIAL_STATE, action ) => {
 
     switch ( action.type ) {
 
-        case 'SET_CURRENT_USER' :
+        case UserActionTypes.SET_CURRENT_USER :
             return {
                 // this format will create a new state object with an updated key value
                 // pair of " currentUser : action.payload "

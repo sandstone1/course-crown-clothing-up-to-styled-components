@@ -3,13 +3,20 @@
 import { combineReducers } from 'redux';
 import userReducer from './user/user.reducer';
 
+
+// -- Mark 1 -- continued
+// lecture 108: Implementing Redux in Cart
+import cartReducer from './cart/cart.reducer';
+// End of -- Mark 1 --
+
 // we are going to export out combindReducers as the default value and combineReducers
 // will return one giant object and this object is bound with all the redux functionality
 // that we want
 export default combineReducers(
 
     {  
-        user : userReducer
+        user : userReducer,
+        cart : cartReducer
     }
 
 );

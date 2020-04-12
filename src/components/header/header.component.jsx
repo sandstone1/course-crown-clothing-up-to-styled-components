@@ -11,8 +11,7 @@ import './header.styles.scss';
 // lecture 85: Google Sign In Authentication 3
 // we want to import the auth library from firebase.utilis.js
 import { auth } from '../../firebase/firebase.utils';
-// End of -- Mark 1
-
+// End of -- Mark 1 --
 
 
 // -- Mark 2 --
@@ -22,7 +21,19 @@ import { auth } from '../../firebase/firebase.utils';
 // like redux and remember higher order components are just functions that take components
 // as arguments and then return a new souped up component
 import { connect } from 'react-redux';
-// End of -- Mark 2
+// End of -- Mark 2 --
+
+
+// -- Mark 3 --
+// lecture 106: Cart Component
+import CartIcon from '../cart-icon/cart-icon.component';
+// End of -- Mark 3 --
+
+
+// -- Mark 4 --
+// lecture 107: Card Dropdown Component
+import CartDropdown from '../cart-dropdown/cart-dropdown.component';
+// End of -- Mark 4 --
 
 
 // our Header component will be a functional component
@@ -54,12 +65,54 @@ import { connect } from 'react-redux';
 // final application style so go to our custom button component or custom-button.component.jsx
 */
 // End of -- Mark 1
-const Header = ( { currentUser } ) => (
+const Header = ( { currentUser, show } ) => (
     // we will create an outer container that will hold the logo and the links to different
     // pages
 
     // make a new folder in src called assets and inside that folder add in our crown.svg/
     // file, which is our logo
+
+    // -- Mark 3 continued --
+    // lecture 106: Cart Component
+    // place the CartIcon component at the very end
+
+    // -- Mark 4 continued --
+    // lecture 107: Card Dropdown Component
+    // place the CartIcon component just outside of the options div
+    // next, we need to conditionally show or hide our CartDropdown component and in order
+    // to do this we will show or hide this component based on a true or false value and we
+    // will create a cart reducer to do this and by having this functionality in the reducer
+    // were able to pass this functionality to any component that needs it
+
+    // -- Mark 5 --
+    // lecture 108: Implementing Redux in Cart
+    // conditionally render the CartDropdown component so change " <CartDropdown /> " to
+    /*
+        {
+            show ? (
+                <CartDropdown />
+            ) : (
+                null
+            )
+        }
+    */
+    // we could have done this instead:
+    /*
+        {
+            show ? <CartDropdown /> : null
+        }
+    */
+    // before we add our add item feature to our cart let's commit our code
+    // so let's do:
+    // Rogers-iMac:crown_clothing Home$ git status
+    // Rogers-iMac:crown_clothing Home$ git add .
+    // Rogers-iMac:crown_clothing Home$ git commit -m " added cart icon and cart dropdown
+    // components to our app and a toggle feature for our cart dropdown "
+    // Rogers-iMac:crown_clothing Home$ git push origin master
+
+    // now if I go to my " crown-clothing " project in GutHub, I see the changes were uploaded
+    // sucessfully
+
     <div className="header">
 
         <Link className="logo-container" to="/">
@@ -83,11 +136,22 @@ const Header = ( { currentUser } ) => (
                     SIGN IN
                 </Link>
             }
+            <CartIcon />
 
         </div>
 
+        {
+            show ? (
+                <CartDropdown />
+            ) : (
+                null
+            )
+        }
+
     </div>
+
 );
+// End of -- Mark 3 and Mark 4 and Mark 5 --
 
 
 // -- Mark 2 -- continued
@@ -108,13 +172,24 @@ const Header = ( { currentUser } ) => (
 // GO TO SRC/APP.JS -- GO TO Mark 9
 // ==============================
 
-const mapStateToProps = ( state ) => ({
 
-    currentUser : state.user.currentUser
+// -- Mark 5 --
+// lecture 108: Implementing Redux in Cart
+// now add in the state from the cart reducer or root reducer to show and hide our
+// CartDropdown component and remember we could have done a more advanced destructuring
+// construct for mapStateToProps or we could change
+// " const mapStateToProps = ( state ) => ( " to this
+// " const mapStateToProps = ( { user : { currentUser }, cart : { show } } ) => ( "
+const mapStateToProps = ( state ) => (
 
-});
+    {
+        currentUser : state.user.currentUser,
+        show        : state.cart.show
+    }
+
+);
 
 
 export default connect( mapStateToProps )( Header );
 
-// End of -- Mark 2
+// End of -- Mark 2 and Mark 5 --

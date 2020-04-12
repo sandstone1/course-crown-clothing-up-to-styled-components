@@ -1,4 +1,14 @@
 
+// -- Mark 1 --
+// lecture 105: User Redirect and User Action Type
+import { UserActionTypes } from './user.types';
+
+// change the type value below from " type : 'SET_CURRENT_USER' " to
+// " type : UserActionTypes.SET_CURRENT_USER " and by setting the type value to
+// a constant we will prevent typos
+// End of -- Mark 1 --
+
+
 // these action creator functions have to be in the right format and our
 // serCurrentUser action creator function will be a function that takes one parameter and
 // that parameter is the " user " object and this user object will either equal our userAuth
@@ -11,7 +21,7 @@
 // the user value and then we will implicitly return the following object:
 export const setCurrentUser = ( user ) => (
     {
-        type    : 'SET_CURRENT_USER',
+        type    : UserActionTypes.SET_CURRENT_USER,
         payload : user
     }
 );

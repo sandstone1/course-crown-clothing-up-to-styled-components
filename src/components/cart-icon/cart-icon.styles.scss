@@ -1,0 +1,22 @@
+
+.cart-icon {
+    display               : grid;
+    justify-items         : center;
+    position              : relative;
+    padding               : 5px 15px 5px 15px;
+
+    cursor : pointer;
+
+    &--icon {
+        width  : 24px;
+        height : 24px;
+    }
+
+    &--item-count {
+        position : absolute;
+        bottom   : 14px;
+
+        font-size   : 10px;
+        font-weight : 700;
+    }
+}
