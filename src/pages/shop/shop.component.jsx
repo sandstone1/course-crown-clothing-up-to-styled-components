@@ -12,7 +12,7 @@
 
 import React from 'react';
 // import in the shop data
-import ShopData from './shop.data';
+import SHOP_DATA from './shop.data';
 // import in the CollectionPrview component
 import CollectionPreview from '../../components/collection-preview/collection-preview.component';
 
@@ -276,9 +276,9 @@ class ShopPage extends React.Component {
     }; // end of state
     */
 
-    // now point collections to our ShopData array from shop.data.jsx
+    // now point collections to our SHOP_DATA array from shop.data.jsx
     state = {
-        collections : ShopData
+        collections : SHOP_DATA
     };
 
     render() {

@@ -60,18 +60,36 @@ render () {
 // off custom button in order for the custom-button class to be a valid class and now let's
 // go to the custom button stylesheet or custom-button.styles.scss and 
 // remember that the destructured isGoogleSignIn prop comes from the SignIn component
-// End of -- Mark 1
-const CustomButton = ( { isGoogleSignIn, children, ...otherProps } ) => (
+// End of -- Mark 1 --
+
+
+// -- Mark 2 --
+// lecture 109: Add to Cart Styling
+// we are going to need to invert a color based on a property and this is similar to how
+// we added a new background color to the button when the button contained a class name
+// of " google-sign-in " in addition to the class name " custom-button " and to do this we
+// will add a new argument below called " inverted " and conditionally add a new class name
+// called " inverted " and this class name will be in addition to the class name of
+// " custom-button " ( see below )
+const CustomButton = ( { isGoogleSignIn, inverted, children, ...otherProps } ) => (
     // remember, clicking on a button element and / or  an input element will trigger the
     // onSubmit property that is located inside our form element ( which is inside the SignIn
     // component ) as long as both the button and input elements have their type attribute set
     // equal to " submit " or " type = "submit" "
     <button
-      className={ `${ isGoogleSignIn ? 'google-sign-in' : '' } custom-button` } { ...otherProps }
+      className=
+      {
+          `${ inverted       ? 'inverted'       : '' }
+           ${ isGoogleSignIn ? 'google-sign-in' : '' }
+           custom-button`
+      }
+      { ...otherProps }
     >
         { children }
     </button>
 );
+// End of -- Mark 2 --
+
 
 export default CustomButton;
 

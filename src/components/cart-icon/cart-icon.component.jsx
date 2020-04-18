@@ -62,7 +62,6 @@ const CartIcon = ( { toggleCart } ) => (
 );
 
 
-
 // -- Mark 1 -- continued
 // lecture 108: Implementing Redux in Cart
 // add mapDispatchToProps and connect()() below

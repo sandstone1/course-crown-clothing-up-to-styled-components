@@ -128,6 +128,7 @@ const Header = ( { currentUser, show } ) => (
             <Link className="option" to="/contact">
                 CONTACT
             </Link>
+
             {
                 currentUser ?
                 <div className="option" onClick={ () => auth.signOut() }>SIGN OUT</div>
@@ -136,6 +137,7 @@ const Header = ( { currentUser, show } ) => (
                     SIGN IN
                 </Link>
             }
+
             <CartIcon />
 
         </div>

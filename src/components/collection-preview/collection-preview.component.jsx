@@ -52,10 +52,57 @@ const CollectionPreview = ( { title, items } ) => (
                 // instead of ( item ) we will have ( id, ...otherItemProps ) and spread out our
                 // other item key value pairs using the spread operator and ...otherItemProps would
                 // represent name={ name } imageUrl={ imageUr } price={ price }
-                .map( ( { id, ...otherItemProps } ) => (
+
+
+                // -- Mark 2 --
+                // lecture 110: Cart Item Reducer
+                // we need the " item " or collection item and remember in our Shop component we
+                // did the following:
+                /*
+                    return (
+
+                        <div className="shop-page">
+                        {
+                            this.state.collections.map( ( { id, title, items } ) => (
+                                <CollectionPreview
+                                    key   ={ id }
+                                    title ={ title }
+                                    items ={ items }
+                                />
+                            ))
+                        }
+                        </div>
+
+                    );
+                */
+                
+                // and now in our CollectionItem component we need the " item " so that we can
+                // pass " item " into our CollectionItem component and then pass " item " into
+                // our dispatch call or " dispatch( addItem( item ) "
+
+                // so change
+                /*
+                    .map( ( { id, ...otherItemProps } ) => (
+                        <CollectionItem
+                            key={ id }
+                            { ...otherItemProps }
+                        />
+                    ))                
+                */
+                // to
+                /*
+                    .map( ( item ) => (
+                        <CollectionItem
+                            key={ item.id }
+                            item={ item }
+                        />
+                    ))
+                */
+                // now go back to our CollectionItem component
+                .map( ( item ) => (
                     <CollectionItem
-                        key={ id }
-                        { ...otherItemProps }
+                        key={ item.id }
+                        item={ item }
                     />
                 ))
             }
@@ -63,6 +110,7 @@ const CollectionPreview = ( { title, items } ) => (
 
     </div>
 );
+// End of -- Mark 2 --
 
 // create a default export for our functional component, CollectionPreview
 export default CollectionPreview;
