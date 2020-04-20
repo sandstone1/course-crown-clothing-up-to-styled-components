@@ -17,7 +17,7 @@
 
     &--items {
         display               : grid;
-        grid-template-rows    : auto;
+        grid-template-rows    : min-content;
         grid-template-columns : auto;
         height                : 240px;
         overflow              : scroll;

@@ -1,0 +1,28 @@
+
+.cart-item {
+    display               : grid;
+    grid-template-rows    : min-content;
+    grid-template-columns : 30% 70%;
+    margin                : 0 0 15px 0;
+
+    &--img {
+        width : 100%;
+    }
+
+    &--details {
+        display               : grid;
+        grid-template-rows    : repeat( 2, min-content );
+        grid-template-columns : auto;
+        align-content         : center;
+        justify-content       : center;
+        grid-row-gap          : 3px; 
+
+        &--name {
+            font-size : 16px;
+        }
+
+    }
+
+}
+
+// now we need to import our CartItem component into our CartDropdown component
