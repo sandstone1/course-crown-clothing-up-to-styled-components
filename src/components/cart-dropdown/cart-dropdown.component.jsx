@@ -38,6 +38,15 @@ import { connect } from 'react-redux';
 import CartItem from '../cart-item/cart-item.component';
 // End of -- Mark 1 --
 
+
+// -- Mark 2--
+// lecture 119: Reselect Library
+// let's import in our selector file
+import { selectCartItems } from '../../redux/cart/cart.selectors';
+// End of -- Mark 2 --
+
+
+
 const CartDropdown = ( { cartItems } ) => (
 
     <div 
@@ -62,6 +71,44 @@ const CartDropdown = ( { cartItems } ) => (
     </div>
 
 );
+
+
+// -- Mark 2--
+// lecture 119: Reselect Library
+// now we can use " selectCartItems " in our mapStateToProps and we will change
+// mapStateToProps from:
+/*
+const mapStateToProps = ( state ) => (
+    {
+        cartItems : state.cart.cartItems
+    }
+);
+*/
+
+// to:
+/*
+const mapStateToProps = ( state ) => (
+    {
+        cartItems : selectCartItems( state )
+    }
+);
+*/
+
+// however, even though this will help with performance, I decided to keep it the same
+// for simplicity sake or so I can more easily understand this code later
+
+// we will write a lot more selectors as we build our application and now let's commit
+// our code
+
+// Rogers-iMac:crown_clothing Home$ git status
+// Rogers-iMac:crown_clothing Home$ git add .
+// Rogers-iMac:crown_clothing Home$ git commit -m " updated our application with reselect and
+// and replaced cart selectors with memoized selectors "
+// Rogers-iMac:crown_clothing Home$ git push origin master
+
+// now if I go to my " crown-clothing " project in GutHub, I see the changes were uploaded
+// sucessfully
+// End of -- Mark 2 --
 
 
 // -- Mark 1 -- continued

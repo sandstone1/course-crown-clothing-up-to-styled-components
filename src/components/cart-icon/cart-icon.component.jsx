@@ -16,7 +16,14 @@ import { toggleCart } from '../../redux/cart/cart.actions';
 // End of -- Mark 1 --
 
 
-const CartIcon = ( { toggleCart } ) => (
+// -- Mark 3 --
+// lecture 119: Reselect Library
+import { selectCartItemsCount } from '../../redux/cart/cart.selectors';
+
+// End of -- Mark 3 --
+
+
+const CartIcon = ( { toggleCart, itemCount } ) => (
 
     // -- Mark 1 --
     // lecture 108: Implementing Redux in Cart
@@ -54,11 +61,82 @@ const CartIcon = ( { toggleCart } ) => (
     >
 
         <ShoppingIcon className="cart-icon--icon" />
-        <span className="cart-icon--item-count">0</span>
+        <span className="cart-icon--item-count">{ itemCount }</span>
 
     </div>
     // End of -- Mark 1 --
 
+);
+
+
+
+// -- Mark 3 -- continued
+// lecture 119: Reselect Library
+// change:
+/*
+const mapStateToProps = ( state ) => (
+
+    {
+        itemCount : state.cart.cartItems.reduce( ( accumlator, currentElement ) =>
+            accumlator + currentElement.quantity,
+            0
+        )
+    }
+
+);
+*/
+
+// to ( remember, we still have to pass " selectCartItemsCount " the state object in
+// order for this to work )
+/*
+const mapStateToProps = ( state ) => (
+
+    {
+        itemCount : selectCartItemsCount( state )
+    }
+
+);
+*/
+
+// if we check our application we see that the cart icon count is still working properly but now
+// we have a memoized selector, which is great for performance
+
+// we can also use selectCartItems in our cart-dropdown.component.jsx file and go to that
+// file now
+// End of -- Mark 3 --
+
+// -- Mark 2 --
+// lecture 115: Selectors in Redux
+// change " export default connect( null, mapDispatchToProps )( CartIcon ); " to
+// " export default connect( mapStateToProps, mapDispatchToProps )( CartIcon ); "
+// and add mapStateToProps below and then use the reduce method to add all the items
+// in the cartItems array and then set that value equal to " itemCount " and then
+// add " itemCount " to the argument above and then change
+// " <span className="cart-icon--item-count">0</span> " to
+// " <span className="cart-icon--item-count">{ itemCount }</span> "
+
+// what we wrote in mapStateToProps is called a selector because we are getting the whole
+// state and then we are writing a function that pulls off a small slice of that state 
+const mapStateToProps = ( state ) => (
+    
+    // what we wrote below is called a selector because we are getting the whole state
+    // object and then we are writing a function that pulls off a small slice of that state
+    // and then computing a new value based off of that state and the only caveat to this
+    // approach is that everytime the state object changes whether that be inside the cart
+    // reducer or the user reducer, mapStateToProps gets called and then rerenders our
+    // component and remember everytime we have a new state object mapStateToProps gets
+    // called even if the key value pairs remain the same and this is not good for performance
+    // and we don't want to rerender our component unless the changes to the state object
+    // directly impact our component so what we want to do is use something called memorization
+    // which is the caching or storing of the selector's value and we can achieve this kind of
+    // memorization using a library called Reselect and if the state object changes but the
+    // itemCount value has not changed then Reselect will pass in the old value into our
+    // component and our component will know not to rerender in this case
+    
+    // in the next lecture we will take a look at the Reselect library
+    {
+        itemCount : selectCartItemsCount( state )
+    }
 );
 
 
@@ -72,7 +150,7 @@ const mapDispatchToProps = ( dispatch ) => (
 );
 
 
-export default connect( null, mapDispatchToProps )( CartIcon );
-// End of -- Mark 1 --
+export default connect( mapStateToProps, mapDispatchToProps )( CartIcon );
+// End of -- Mark 1 and Mark 2 --
 
 // after I set up the styling, let's bring this into our Header component
