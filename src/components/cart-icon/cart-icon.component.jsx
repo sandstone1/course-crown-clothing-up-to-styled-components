@@ -19,7 +19,6 @@ import { toggleCart } from '../../redux/cart/cart.actions';
 // -- Mark 3 --
 // lecture 119: Reselect Library
 import { selectCartItemsCount } from '../../redux/cart/cart.selectors';
-
 // End of -- Mark 3 --
 
 

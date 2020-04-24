@@ -23,7 +23,19 @@
         overflow              : scroll;
     }
 
+    // -- Mark 1 --
+    // lecture 121: Checkout Page
+    &--empty-message {
+        margin : 50px auto;
+
+        font-size : 18px;
+    }
+    // End of -- Mark 1 --
+
     button {
         margin : 10px 0 0 0;
+
+        outline : none;
     }
 }
+

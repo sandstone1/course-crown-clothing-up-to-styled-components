@@ -36,6 +36,21 @@ import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 // End of -- Mark 4 --
 
 
+// -- Mark 6 --
+// lecture 120: User Selectors
+// let's import in createStructuredSelector from reselect and I'm not going to use
+// createStructuredSelector or the other 2 selectors since I want to keep things simple
+// and internalize what I've already learned
+/*
+import { createStructuredSelector } from 'reselect';
+import { selectCartShow } from '../../redux/cart/cart.selectors';
+import { selectCurrentUser } from '../../redux/user/user.selectors';
+*/
+// End of -- Mark 6 --
+
+
+
+
 // our Header component will be a functional component
 
 // -- Mark 1 -- continued
@@ -182,6 +197,60 @@ const Header = ( { currentUser, show } ) => (
 // construct for mapStateToProps or we could change
 // " const mapStateToProps = ( state ) => ( " to this
 // " const mapStateToProps = ( { user : { currentUser }, cart : { show } } ) => ( "
+
+
+// -- Mark 6 --
+// lecture 120: User Selectors
+// change:
+/*
+const mapStateToProps = ( state ) => (
+
+    {
+        currentUser : state.user.currentUser,
+        show        : state.cart.show
+    }
+
+);
+*/
+
+// to:
+/*
+const mapStateToProps = ( state ) => (
+
+    {
+        currentUser : selectCurrentUser( state ),
+        show        : selectCartShow( state )
+    }
+
+);
+*/
+
+// or if we use createStructuredSelector:
+/*
+const mapStateToProps = createStructuredSelector(
+
+    {
+        currentUser : selectCurrentUser,
+        show        : selectCartShow
+    }
+
+);
+// and createStructuredSelector will automatically pass our top level state into our
+// selectors inside mapStateToProps
+*/
+
+// however, as mentioned above I'm keeping my code the same
+
+// remember we could use the selectCurrentUser selector inside App.js as well and Yihua
+// recommended that we use the createStructuredSelector function as well, just in case
+// we add more selectors to mapStateToProps in the future
+
+// Yihua recommends we use createStructuredSelector inside our cart dropdown component and
+// cart icon component as well and if we check our app we will see that our code still works
+// the same but is now more performant and Yihua said moving forward all of our code will
+// be written using reselect in regards to our selectors and this is a very common practice
+// when using redux in our application
+
 const mapStateToProps = ( state ) => (
 
     {
@@ -194,4 +263,4 @@ const mapStateToProps = ( state ) => (
 
 export default connect( mapStateToProps )( Header );
 
-// End of -- Mark 2 and Mark 5 --
+// End of -- Mark 2 and Mark 5 and Mark 6 --

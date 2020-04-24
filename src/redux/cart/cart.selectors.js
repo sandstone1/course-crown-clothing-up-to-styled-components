@@ -29,7 +29,7 @@ const selectCart = ( state ) => state.cart;
 export const selectCartItems = createSelector( 
     [ selectCart ],
     ( cart ) => cart.cartItems
- ); 
+); 
 
 // now let's make a new selector called " selectCartItemsCount " and we will use
 // createSelector() again and we will use " selectCartItems " as the first argument and
@@ -65,3 +65,44 @@ export const selectCartItemsCount = createSelector(
 // and now the return value for the function above is the total quantity of our cartItems or
 // " selectCartItemsCount " and now let's pull this into our CartIcon component and see how
 // it works so go to cart-icon.component.jsx
+
+
+// -- Mark 1 --
+// lecture 120: User Selectors
+// now set up a selector for " show "
+
+// Step 1:
+// take our input selector from above or our cart reducer
+// " const selectCart = ( state ) => state.cart; "
+
+// Step 2:
+// get our selector for " show " and remember the first argument is an array of input selectors
+// and the second argument is a function and remember the second argument gets the return value of
+// selectCart, which is our cart reducer and then we return cart.show, which equals our cart show
+// selector or " selectCartShow "
+export const selectCartShow = createSelector( 
+    [ selectCart ],
+    ( cart ) => cart.show
+);
+
+// now let's start replacing the respective selectors and let's go to header.component.jsx
+
+// End of -- Mark 1 --
+
+
+// -- Mark 2 --
+// lecture 122: Checkout Page 2
+// we need to create a total selector that will add the prices of each item in the cart and give
+// us a total price so we could revise our " selectCartItemsCount " select above and come up with
+// a total price and now go back to checkout.component.jsx and import in this selector
+export const selectCartItemsPriceTotal = createSelector(
+    [ selectCartItems ],
+    ( cartItems ) => 
+        cartItems.reduce(
+            ( accumlator, currentElement ) =>
+                accumlator + currentElement.quantity * currentElement.price,
+                0
+        )
+);
+// End of -- Mark 2 --
+

@@ -34,6 +34,12 @@ import Header from './components/header/header.component';
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 // End of -- Mark 6 --
 
+// -- Mark 14 --
+// lecture 121: Checkout Page
+import CheckoutPage from './pages/checkout/checkout.component';
+// End of -- Mark 14 --
+
+
 // -- Mark 7 --
 // lecture 83: Google Sign In Authentication 2
 // we import in the named export " auth " since we want to store the state of our user in App.js
@@ -968,29 +974,44 @@ redux-logger.js:401   next state {user: {…}}
             // ==============================
             // GO TO SRC/REDUX/USER/USER.TYPES.JS
             // ==============================
+
+
+            // -- Mark 14 -- continued
+            // lecture 121: Checkout Page
+            // add the checkout route below
             <div>
                 <Header />
                 <Switch>
-                    <Route  path="/"
-                            exact={ true }
-                            component={ HomePage }
+                    <Route  
+                        path="/"
+                        exact={ true }
+                        component={ HomePage }
                     />
-                    <Route  path="/shop"
-                            component={ ShopPage }
+                    <Route  
+                        path="/shop"
+                        component={ ShopPage }
                     />
-                    <Route  path="/signin"
-                            exact={ true }
-                            render={ () =>
-                                this.props.currentUser ? (
-                                    <Redirect to="/" />
-                                ) : (
-                                    <SignInAndSignUpPage />
-                                )
-                           }
+                    <Route
+                        path="/checkout"
+                        exact={ true }
+                        component={ CheckoutPage }
                     />
+                    <Route  
+                        path="/signin"
+                        exact={ true }
+                        render={ () =>
+                            this.props.currentUser ? (
+                                <Redirect to="/" />
+                            ) : (
+                                <SignInAndSignUpPage />
+                            )
+                        }
+                    />
+
                 </Switch>        
             </div>
-            // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8 and Mark 9 and Mark 13--
+            // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8, Mark 9, Mark 13 and
+            // Mark 14 --
         );
     }
 }
