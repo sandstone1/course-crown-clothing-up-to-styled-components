@@ -57,7 +57,6 @@ import CheckoutItem from '../../components/checkout-item/checkout-item.component
 // End of -- Mark 2 --
 
 
-
 const CheckoutPage = ( { cartItems, total } ) => (
 
     <div className="checkout">

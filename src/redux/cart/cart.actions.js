@@ -26,3 +26,27 @@ export const addItem = ( item ) => (
     }
 );
 // End of -- Mark 1 --
+
+
+// -- Mark 2 --
+// lecture 126: Remove Items From Cart
+export const clearItemFromCart = ( item ) => (
+    {
+        type    : CartActionTypes.CLEAR_ITEM_FROM_CART,
+        payload : item
+    }
+);
+// now let's update cart.reducer.js
+// End of -- Mark 2 --
+
+
+// -- Mark 3 --
+// lecture 127: Remove Items At Checkout
+export const removeItem = ( item ) => (
+    {
+        type    : CartActionTypes.REMOVE_ITEM,
+        payload : item
+    }
+);
+// now let's go to cart.reducer.js and modify our reducer
+// End of -- Mark 3 --

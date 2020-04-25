@@ -6,6 +6,11 @@ import { CartActionTypes } from './cart.types';
 import { addItemToCart } from './cart.utils';
 // End of -- Mark 2 --
 
+// -- Mark 4 --
+// lecture 127: Remove Items At Checkout
+import { removeItemFromCart } from './cart.utils';
+// End of -- Mark 4 --
+
 // -- Mark 1 --
 // lecture 110: Cart Item Reducer
 // let's set cartItems below equal to an empty array and we will need to create a new
@@ -128,6 +133,38 @@ const cartReducer = ( state = INITIAL_STATE, action ) => {
                 cartItems : addItemToCart( state.cartItems, action.payload )
             };
         // End of -- Mark 1 and Mark 2 --
+
+
+        // -- Mark 3 --
+        // lecture 126: Remove Items From Cart
+        // we can use filter to remove the relevant cartItem and with filter() we will loop through
+        // every cart item in the array and if " cartItem.id !== action.payload.id  " is true then
+        // that particular cart item will remain in the cartItems array and if
+        // " cartItem.id !== action.payload.id " is false, meaning that we have a match then
+        // that particular cart item will be removed from our cartItems array and now go to
+        // checkout-item.component.jsx
+        case CartActionTypes.CLEAR_ITEM_FROM_CART :
+            return {
+                ...state,
+                cartItems : state.cartItems.filter( 
+                    ( cartItem ) => cartItem.id !== action.payload.id
+                )
+            };
+        // End of -- Mark 3 --
+
+
+        // -- Mark 4 -- continued
+        // lecture 127: Remove Items At Checkout
+        // we are going to write a new utility function that will decrease the quantity or
+        // actually remove the item from the cart if the quantity goes to 0 so let's go to
+        // cart.utils.js and now were back from cart.utils.js and first let's import in the
+        // removeItemFromCart utility function above and then apply our utility function below
+        case CartActionTypes.REMOVE_ITEM :
+        return {
+            ...state,
+            cartItems : removeItemFromCart( state.cartItems, action.payload )
+        };
+        // End of -- Mark 4 --
 
         default:
             return state;

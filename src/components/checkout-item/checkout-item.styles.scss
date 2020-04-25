@@ -3,6 +3,7 @@
     display               : grid;
     grid-template-rows    : auto;
     grid-template-columns : 23% 23% 23% 23% 8%;
+    align-items           : center; 
     justify-items         : center;
     padding               : 15px 0 15px 0;
 
@@ -13,4 +14,26 @@
     &--img{
         width : 100%;
     }
+
+    &--remove-button {
+        cursor : pointer;
+    }
+
+    // -- Mark 2 --
+    // lecture 127: Remove Items At Checkout
+    // add the styles for our left and right arrow
+
+    &--quantity-arrow-left {
+        padding : 0 10px 0 0;
+
+        cursor : pointer;
+    }
+
+    &--quantity-arrow-right {
+        padding : 0 0 0 10px;
+
+        cursor : pointer;
+    }
+
+    // End of -- Mark 2 --
 }

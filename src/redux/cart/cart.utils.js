@@ -56,3 +56,47 @@ export const addItemToCart = ( cartItems, cartItemToAdd ) => {
 }
 
 // now import this into CART/CART.REDUCER.JS
+
+
+// -- Mark 1 --
+// lecture 127: Remove Items At Checkout
+// take the utility function above and modify it so that it decreases the cart item quantity and
+// if the user try to decrease the quantity from 1 to 0 then automatically remove that particular
+// item from the checkout page
+export const removeItemFromCart = ( cartItems, cartItemToDecrease ) => {
+
+    const existingCartItem = cartItems.find(
+
+        ( cartItem ) => cartItem.id === cartItemToDecrease.id
+
+    );
+
+    if ( existingCartItem.quantity === 1 ) {
+
+        return cartItems.filter( ( cartItem ) => cartItem.id !== existingCartItem.id )
+
+    }
+
+    else {
+
+        return cartItems.map( ( cartItem ) => (
+
+             cartItem.id === existingCartItem.id ? (
+
+                { 
+                    ...cartItem, 
+                    quantity : cartItem.quantity - 1
+                }
+
+            ) : (
+
+                cartItem
+
+            )
+
+        ) );
+
+    }
+
+}
+// End of -- Mark 1 --
