@@ -1,0 +1,19 @@
+
+.collection-page {
+    display : grid;
+
+    &--title {
+        justify-self : center;
+        margin       : 0 0 30px 0;
+
+        font-size : 38px;
+    }
+
+    &--items {
+        display               : grid;
+        grid-template-rows    : auto;
+        grid-template-columns : repeat( 4, 1fr );
+        grid-gap              : 40px 4%; 
+    }
+
+}

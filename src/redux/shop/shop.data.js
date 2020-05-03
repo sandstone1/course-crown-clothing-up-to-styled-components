@@ -1,7 +1,19 @@
 
 // this is the collections array data from the last lecture
-const SHOP_DATA = [
-    {
+
+
+// -- Mark 1 --
+// lecture 137: Data Normalization + Collection Page
+// let's convert the SHOP_DATA array to an object and what we will do is set the key to the
+// corresponding Url parameter and Yihua said to notice that this set up is similar to
+// how Firebase stores our data and usually we would use UID for the key but in our case
+// since our IDs are numbers it's Ok if we use the titles but make them lowercase for the
+// key so change " { " to " hats : { ", for example, and now let's update our selector in
+// the shop.selector.js file and go to that file now
+// End of -- Mark 1 --
+
+const SHOP_DATA = {
+    hats: {
         id: 1,
         title: 'Hats',
         routeName: 'hats',
@@ -62,7 +74,7 @@ const SHOP_DATA = [
             }
         ]
     },
-    {
+    sneakers: {
         id: 2,
         title: 'Sneakers',
         routeName: 'sneakers',
@@ -117,7 +129,7 @@ const SHOP_DATA = [
             }
         ]
     },
-    {
+    jackets: {
             id: 3,
             title: 'Jackets',
             routeName: 'jackets',
@@ -154,7 +166,7 @@ const SHOP_DATA = [
             }
             ]
     },
-    {
+    womens: {
             id: 4,
             title: 'Womens',
             routeName: 'womens',
@@ -203,7 +215,7 @@ const SHOP_DATA = [
             }
         ]
     },
-    {
+    mens: {
         id: 5,
         title: 'Mens',
         routeName: 'mens',
@@ -247,6 +259,6 @@ const SHOP_DATA = [
         ]
     }
 
-]; // end of the shop data array
+};
 
 export default SHOP_DATA;

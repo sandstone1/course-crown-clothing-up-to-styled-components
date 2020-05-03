@@ -999,16 +999,18 @@ redux-logger.js:401   next state {user: {…}}
                     <Route  
                         path="/signin"
                         exact={ true }
-                        render={ () =>
-                            this.props.currentUser ? (
-                                <Redirect to="/" />
-                            ) : (
-                                <SignInAndSignUpPage />
-                            )
+                        render=
+                        { 
+                            () =>
+                                this.props.currentUser ? (
+                                    <Redirect to="/" />
+                                ) : (
+                                    <SignInAndSignUpPage />
+                                )
                         }
                     />
 
-                </Switch>        
+                </Switch>
             </div>
             // End of -- Mark 3, Mark 4, Mark 5, Mark 6, Mark 7, Mark 8, Mark 9, Mark 13 and
             // Mark 14 --

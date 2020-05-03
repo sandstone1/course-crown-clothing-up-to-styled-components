@@ -172,7 +172,7 @@ const CollectionItem = ( { item, addItem } ) => {
         <div className="collection-item">
 
             <div 
-                className="image"
+                className="collection-item--image"
                 // add our style directly inside our <div>
                 style={
                     {
@@ -184,7 +184,7 @@ const CollectionItem = ( { item, addItem } ) => {
             >
             </div>
 
-            <div className="collection-footer">
+            <div className="collection-item--footer">
                 <span className="name">{ name }</span>
                 <span className="price">{ price }</span>
             </div>

@@ -2,6 +2,20 @@
 // import in the createStore function and the applyMiddleware function
 import { createStore, applyMiddleware } from 'redux';
 
+
+// -- Mark 1 --
+// lecture 129: Redux Persist
+// import persistStore from redux-persist and persistStore allows our browser to cache our
+// store depending on certain configuration options that we will set in our root reducer and
+// remember when we import in our rootReducer below or
+// " import rootReducer from './root-reducer'; " we are really importing in " persistReducer "
+// or " export default persistReducer( persistConfig, rootReducer ); " and persistReducer
+// is essentially a modified version of our root reducer and this modified version has
+// persistent capabilities
+import { persistStore } from 'redux-persist';
+// End of -- Mark 1 --
+
+
 // remember that we need to apply middleware to our store so that whenever actions get
 // fired or dispatched we can catch them and then display them and remember middleware is the
 // piece in between our actions and our root reducer and remember middleware is really
@@ -46,8 +60,16 @@ export default store;
 // application and this will allow us to dispatch actions to the store or we can pull values
 // off of the store and put these values into our components
 
+// now go to src/index.js
 
-// ==============================
-// GO TO SRC/INDEX.JS
-// ==============================
+
+// -- Mark 1 -- continued
+// lecture 129: Redux Persist
+// persistor calls our persistStore with the store passed in as an argument to persistStore()
+// and persistor is essentially a persistent version of our store so all we are really doing
+// here is creating a persistent version of the store using the persistStore function and then
+// saving this persistent version of the store to a const called " persistor "
+export const persistor = persistStore( store );
+// and now we need to update our root reducer so go to root-reducer.js
+// End of -- Mark 1 --
 

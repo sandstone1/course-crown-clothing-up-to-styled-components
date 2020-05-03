@@ -24,6 +24,16 @@ import store from '../src/redux/store';
 // End of -- Mark 3 --
 
 
+// -- Mark 4 --
+// lecture 129: Redux Persist
+// import in a new component called PersistGate and from GitHub " PersistGate delays the
+// rendering of your app's UI until your persisted state has been retrieved and saved to
+// redux. " and then let's import in persistor and then let's wrap our app inside PersistGate
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from '../src/redux/store';
+// End of -- Mark 4 --
+
+
 // -- Mark 1 -- continued
 // lecture 65: Routing in Our Project
 // BrowserRouter is a component we are going to wrap around our application and this gives <App />
@@ -71,12 +81,46 @@ import store from '../src/redux/store';
 
 // End of -- Mark 3 --
 
+
+// -- Mark 4 -- continued
+// lecture 129: Redux Persist
+// wrap " <App /> " inside the PersistGate component and we will pass in
+// " persistor={ persistor } " where persistor represents the persistent version of our store
+// and PersistGate will rehydrate the state whenever our application refreshes and now
+// let's go to our app and see if our cart items are persisting after the page refreshes
+// and / or after closing down our application tab and after I test this out I see that everything
+// is working as expected and what is happening behind the scences is detailed in redux logger
+// and looks like the following:
+/*
+redux-logger.js:377  action persist/PERSIST @ 14:29:22.384
+redux-logger.js:388  prev state {user: {…}, cart: {…}}
+redux-logger.js:392  action     {type: "persist/PERSIST", register: ƒ, rehydrate: ƒ}
+redux-logger.js:401  next state {user: {…}, cart: {…}, _persist: {…}}
+
+redux-logger.js:377  action persist/REHYDRATE @ 14:29:22.412
+redux-logger.js:388  prev state {user: {…}, cart: {…}, _persist: {…}}
+redux-logger.js:392  action     {type: "persist/REHYDRATE", payload: {…}, err: undefined, key: "root"}
+redux-logger.js:401  next state {user: {…}, cart: {…}, _persist: {…}}
+*/
+
+// so what is happening is the first persist action ( i.e. " action persist/PERSIST " ) is checking
+// to see whether or not anything exist in state and if something does exist inside our state
+// object ( cart items in our case ) then redux persist will fire off a new action that says: " hey
+// I want to hydrate the state with whatever we stored inside our preferred method of storage",
+// which in our case is local storage and this happens
+// in " action persist/REHYDRATE " and remember we set up our storage inside root-reducer.js so
+// now after writing all this code were able to maintain cart state across sessions and this is
+// really necessary in an ecommerce application
+// End of -- Mark 4 --
+
 ReactDOM.render(
     <Provider store={ store } >
         <BrowserRouter>
-            <App />
+            <PersistGate persistor={ persistor }>
+                <App />
+            </PersistGate>
         </BrowserRouter>
     </Provider>,
     document.getElementById( 'root' )
 );
-// End of -- Mark 1 and Mark 2 --
+// End of -- Mark 1 and Mark 2 and Mark 4 --

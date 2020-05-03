@@ -40,9 +40,9 @@ const CollectionPreview = ( { title, items } ) => (
     // in the next section, we are going to style all this stuff
     <div className="collection-preview">
 
-        <h1 className="title">{ title.toUpperCase() }</h1>
+        <h1 className="collection-preview--title">{ title.toUpperCase() }</h1>
 
-        <div className="preview">
+        <div className="collection-preview--preview">
             {
                 items
                 .filter( ( item, index ) => index < 4 )

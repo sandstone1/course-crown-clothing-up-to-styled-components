@@ -29,7 +29,7 @@ const selectCart = ( state ) => state.cart;
 export const selectCartItems = createSelector( 
     [ selectCart ],
     ( cart ) => cart.cartItems
-); 
+);
 
 // now let's make a new selector called " selectCartItemsCount " and we will use
 // createSelector() again and we will use " selectCartItems " as the first argument and
