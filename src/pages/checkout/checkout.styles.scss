@@ -27,4 +27,21 @@
         font-size : 36px;
     }
 
+    // this is the stripe button but I can't modify certain properties due to
+    // stripe styles and now that we have the stripe integration built in we have
+    // pretty much built the majority of the features in our application and in the
+    // next sections we will start covering more advanced topics
+    button {
+        justify-self : end;
+        width        : 100px;
+    }
+
+    &--test-warning {
+        margin : 40px 0 40px 0;
+
+        font-size  : 40px;
+        color      : red;
+        text-align : center;
+    }
+
 }

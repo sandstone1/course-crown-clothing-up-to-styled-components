@@ -57,6 +57,17 @@ import CheckoutItem from '../../components/checkout-item/checkout-item.component
 // End of -- Mark 2 --
 
 
+
+// -- Mark 3 --
+// lecture 142: Stripe Integration
+// insert the StripeCheckoutButton at the end and now if we go to our app we will see the
+// stripe checkout button at the bottom of the checkout page and let's put a warning
+// and put the wrning just above our StripeCheckoutButton component
+import StripeCheckoutButton from '../../components/stripe-button/stripe-button.component';
+// End of -- Mark 3 --
+
+
+
 const CheckoutPage = ( { cartItems, total } ) => (
 
     <div className="checkout">
@@ -103,6 +114,14 @@ const CheckoutPage = ( { cartItems, total } ) => (
             </div>
 
         </div>
+
+        <div className="checkout--test-warning">
+            *Please use the following test credit card for payments*
+            <br />
+            4242 4242 4242 4242 - Exp: 01/21 - CVV: 123
+        </div>
+
+        <StripeCheckoutButton price={ total } />
 
     </div>
 
